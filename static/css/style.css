@@ -179,3 +179,9 @@ footer {
 .btn-instagram:hover {
   opacity: 0.9;
 }
+
+.foto-anto {
+    width: 300px;
+    height: auto;
+    border-radius: 8px;
+}
