@@ -1,0 +1,181 @@
+/* RESET BÁSICO */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ESTILOS GENERALES */
+head {
+    
+    padding: 10px;
+    text-align: center;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #efe7dd;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* HEADER */
+header {
+    background-color: #764b36;
+    color: #fadddd;
+    padding: 20px;
+}
+
+/* NAVEGACIÓN */
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* CONTENIDO */
+main {
+    padding: 30px;
+}
+
+section {
+    margin-bottom: 40px;
+    
+}
+
+/* TÍTULOS */
+h1, h2, h3 , h5{
+    color: #ccc7a9;
+    margin-bottom: 10px;
+}
+h4 {
+    color: #764b36;
+    margin-bottom: 10px;
+}
+
+/* FOOTER (si lo tenés) */
+footer {
+    background-color: #ccc7a9;
+    padding: 15px;
+    text-align: center;
+    font-size: 14px;
+}
+   
+/* BOTÓN DE WHATSAPP */
+.btn-wsp {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 10px 16px;
+  background-color: #25D366;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.btn-wsp:hover {
+  background-color: #1ebe5d;
+}
+.btn-wsp i {
+  margin-right: 8px;
+}
+.btn-wsp {
+  align-self: flex-start;
+}
+/*logo*/
+.logo {
+  width: 150px;
+  height: auto;
+  display: block;
+  margin: 0 auto 20px auto;
+}
+
+/* ESTILOS ESPECÍFICOS PARA SERVICIOS. */
+
+
+.lista-servicios {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.servicios {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: center;
+}
+.servicios h3 {
+  font-size: 20px;   /* acá está lo de “el título chico” */
+  margin-bottom: 22px;
+  
+}
+.servicios img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+.servicios .btn-wsp {
+  width: 100%;
+  text-align: center;
+}
+
+
+/* ESTILOS ESPECÍFICOS PARA PRODUCTOS */
+
+.lista-productos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.producto {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: center;
+}
+.producto h3 {
+  font-size: 20px;   /* acá está lo de “el título chico” */
+  margin-bottom: 22px;
+  
+}
+.producto img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+.producto .btn-wsp {
+  width: 100%;
+  text-align: center;
+}
+/* BOTÓN DE INSTAGRAM */
+.btn-instagram {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 10px 16px;
+  background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.btn-instagram:hover {
+  opacity: 0.9;
+}
