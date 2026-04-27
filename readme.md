@@ -195,8 +195,7 @@ python main.py
 * [ ] Sistema de turnos
 * [ ] Panel administrativo
 
----
-
+--
 ## 📄 Licencia
 
 Proyecto en desarrollo.
