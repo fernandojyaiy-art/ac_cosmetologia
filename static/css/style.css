@@ -184,4 +184,6 @@ footer {
     width: 300px;
     height: auto;
     border-radius: 8px;
+    display: block;      /* ← esto */
+    margin: 0 auto;      /* ← y esto */
 }
