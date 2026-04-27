@@ -4,6 +4,13 @@
     padding: 0;
     box-sizing: border-box;
 }
+:root {
+    --color-principal: #764b36;
+    --color-fondo: #efe7dd;
+    --color-claro: #ccc7a9;
+    --color-texto: #333;
+    --color-header-texto: #fadddd;
+}
 
 /* ESTILOS GENERALES */
 head {
@@ -21,7 +28,7 @@ body {
 
 /* HEADER */
 header {
-    background-color: #764b36;
+    background-color: var(--color-principal);
     color: #fadddd;
     padding: 20px;
 }
