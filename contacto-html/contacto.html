@@ -6,21 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
    
     <title>Contacto - Centro de Estética</title>  
-    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="/static/css/style.css">
    
 </head>
 
 <body>
     <header  id="inicio">
-         <img src="../static/imagenes/logo-1.jpeg" alt="Logo Estética" class="logo">
+         <img src="/static/imagenes/logo-1.jpeg" alt="Logo Estética" class="logo">
         <h1>Contacto - Centro de Estética</h1>
         
         <nav>
             <ul>
-                <li><a href="../index.html">Inicio</a></li>
-                <li><a href="../servicios/serv.html">Servicios</a></li>
-                <li><a href="contacto.html">Contacto</a></li>
-                <li><a href="../productos/productos.html">Productos</a></li>
+                <li><a href="/">Inicio</a></li>
+                <li><a href="/servicios">Servicios</a></li>
+                <li><a href="/contacto">Contacto</a></li>
+                <li><a href="/productos">Productos</a></li>
             </ul>
         </nav>
     </header>
@@ -49,28 +49,34 @@
     <footer>
          <h2>Contáctanos</h2>
          <p>Si tienes alguna pregunta o deseas reservar una cita, no dudes en contactarnos a través de los siguientes medios:</p>
-         
-         <ul>
-             <li>Teléfono: +54 9 11 2403 8046 </li>
-             <a href="https://wa.me/5491124038046?text=Hola,%20quiero%20tomar%20un%20turno%20o%20hacer%20una%20consulta."
-                        class="btn-wsp"
-                        target="_blank">
-                        consultar a nuestro WhatsApp por turnos
-             </a>
-            
-             <a href="https://www.instagram.com/cosmetologa.ac/"
-             target="_blank"
-            rel="noopener"
-             class="btn-instagram">
-            Instagram
-            </a>
 
-    
-             <li>Email: contacto@centrodeestetica.com.ar</li>   
-         </ul>
          
+        <div class="contacto-lista">
+             <a href="https://wa.me/5491124038046?text=Hola,%20quiero%20tomar%20un%20turno%20o%20hacer%20una%20consulta."
+                class="contacto-fila" target="_blank" rel="noopener">
+                 <span class="contacto-icono">💬</span>
+                 <span class="contacto-texto">
+                     <span class="contacto-etiqueta">WhatsApp</span>
+                     <span class="contacto-dato">Escribinos</span>
+                 </span>
+             </a>
+             <a href="https://www.instagram.com/cosmetologa.ac/" target="_blank" rel="noopener" class="contacto-fila">
+                 <span class="contacto-icono">📸</span>
+                 <span class="contacto-texto">
+                     <span class="contacto-etiqueta">Instagram</span>
+                     <span class="contacto-dato">@cosmetologa.ac</span>
+                 </span>
+             </a>
+             <a href="mailto:contacto@centrodeestetica.com.ar" class="contacto-fila">
+                 <span class="contacto-icono">✉️</span>
+                 <span class="contacto-texto">
+                     <span class="contacto-etiqueta">Email</span>
+                     <span class="contacto-dato">contacto@centrodeestetica.com.ar</span>
+                 </span>
+             </a>
+        </div>
     </footer>   
 </body>          
 
 
-</html>    
+</html>

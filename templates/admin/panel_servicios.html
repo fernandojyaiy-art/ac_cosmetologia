@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Servicios - Ac Cosmetología</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <h1>Servicios / Tratamientos</h1>
+    <div class="acciones-panel">
+        <a href="/admin/panel">← Volver a Productos</a>
+        <a href="/admin/nuevo-servicio">+ Agregar servicio</a>
+        <a href="/admin/categorias">Categorías</a>
+    </div>
+
+    <table class="tabla-panel">
+        <tr>
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Categoría</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+        {% for s in servicios %}
+        <tr>
+            <td>{% if s.imagen %}<img src="{{ s.imagen }}" width="60">{% endif %}</td>
+            <td>{{ s.nombre }}</td>
+            <td>{{ s.categoria.nombre if s.categoria else "-" }}</td>
+            <td>
+                {% if s.disponible %}
+                    <span class="estado-disponible">Disponible</span>
+                {% else %}
+                    <span class="estado-agotado">No disponible</span>
+                {% endif %}
+            </td>
+            <td>
+                <a href="/admin/editar-servicio/{{ s.id }}">Editar</a>
+                <a href="/admin/eliminar-servicio/{{ s.id }}" onclick="return confirm('¿Eliminar este servicio?')">Eliminar</a>
+                <a href="/admin/toggle-servicio/{{ s.id }}">
+                    {% if s.disponible %}Ocultar{% else %}Mostrar{% endif %}
+                </a>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5">Todavía no cargaste ningún servicio.</td></tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

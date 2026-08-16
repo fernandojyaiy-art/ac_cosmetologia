@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos - AC Cosmetología</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    <header id="inicio">
+        <img src="/static/imagenes/logo-1.jpeg" alt="Logo Estética" class="logo">
+        <h1>Catálogo de Productos</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Inicio</a></li>
+                <li><a href="/servicios">Servicios</a></li>
+                <li><a href="/contacto">Contacto</a></li>
+                <li><a href="/productos">Productos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% set hay_productos = namespace(valor=false) %}
+
+        <h2>Nuestros productos</h2>
+        <ul>
+            {% for categoria in categorias %}
+                {% set productos_disponibles = categoria.productos | selectattr("disponible") | list %}
+                {% if productos_disponibles %}
+                <li><a href="#cat-{{ categoria.id }}">{{ categoria.nombre }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+
+        {% for categoria in categorias %}
+            {% set productos_disponibles = categoria.productos | selectattr("disponible") | list %}
+            {% if productos_disponibles %}
+                {% set hay_productos.valor = true %}
+                <section id="cat-{{ categoria.id }}">
+                    <h2>{{ categoria.nombre }}</h2>
+                    <ul class="lista-productos">
+                        {% for producto in productos_disponibles %}
+                        <li class="producto">
+                            {% if producto.imagen %}
+                            <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}">
+                            {% endif %}
+                            <h3>{{ producto.nombre }}</h3>
+                            {% if producto.marca %}
+                            <p class="marca-producto">{{ producto.marca.nombre }}</p>
+                            {% endif %}
+                            {% if producto.descripcion %}
+                            <p>{{ producto.descripcion }}</p>
+                            {% endif %}
+                            <p class="precio-producto">${{ "%.2f"|format(producto.precio) }}</p>
+
+                            <a href="https://wa.me/5491124038046?text=Hola,%20quiero%20consultar%20por%20el%20producto:%20{{ producto.nombre }}"
+                               class="btn-wsp" target="_blank" rel="noopener">
+                                Comunicate por WhatsApp
+                            </a>
+
+                            <button class="btn-agregar-carrito" data-nombre="{{ producto.nombre }}">
+                                Agregar al carrito
+                            </button>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </section>
+            {% endif %}
+        {% endfor %}
+
+        {% if not hay_productos.valor %}
+        <p>Todavía no hay productos cargados.</p>
+        {% endif %}
+    </main>
+
+    <p><a href="#inicio">Volver al inicio</a></p>
+    <footer>
+        <p>© 2026 Centro de Estética.</p>
+        <div class="contacto-lista">
+            <a href="https://wa.me/5491124038046" target="_blank" rel="noopener" class="contacto-fila">
+                <span class="contacto-icono">💬</span>
+                <span class="contacto-texto">
+                    <span class="contacto-etiqueta">WhatsApp</span>
+                    <span class="contacto-dato">Escribinos</span>
+                </span>
+            </a>
+            <a href="https://www.instagram.com/cosmetologa.ac/" target="_blank" rel="noopener" class="contacto-fila">
+                <span class="contacto-icono">📸</span>
+                <span class="contacto-texto">
+                    <span class="contacto-etiqueta">Instagram</span>
+                    <span class="contacto-dato">@cosmetologa.ac</span>
+                </span>
+            </a>
+        </div>
+    </footer>
+
+    <button id="boton-carrito-flotante" aria-label="Ver carrito">
+        🛒
+        <span id="contador-carrito">0</span>
+    </button>
+
+    <div id="panel-carrito">
+        <h3>Tu pedido</h3>
+        <ul id="lista-carrito"></ul>
+        <div class="panel-carrito-acciones">
+            <button id="btn-vaciar-carrito">Vaciar carrito</button>
+            <button id="btn-enviar-pedido">Enviar pedido por WhatsApp</button>
+        </div>
+    </div>
+
+    <script src="/static/js/carrito.js"></script>
+</body>
+</html>

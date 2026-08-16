@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar servicio - Ac Cosmetología</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="admin-content">
+        <h1>Editar servicio</h1>
+        <a href="/admin/servicios" class="volver-panel">← Volver a Servicios</a>
+
+        <div class="admin-bloque">
+            {% if servicio.imagen %}
+            <img src="{{ servicio.imagen }}" alt="{{ servicio.nombre }}" class="imagen-actual">
+            {% endif %}
+
+            <form method="post" action="/admin/editar-servicio/{{ servicio.id }}" enctype="multipart/form-data" class="form-producto">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre" value="{{ servicio.nombre }}" required>
+
+                <label for="descripcion">Descripción / precio</label>
+                <textarea id="descripcion" name="descripcion" rows="4">{{ servicio.descripcion or "" }}</textarea>
+
+                <label for="categoria_id">Categoría</label>
+                <select id="categoria_id" name="categoria_id" required>
+                    {% for cat in categorias %}
+                    <option value="{{ cat.id }}" {% if cat.id == servicio.categoria_id %}selected{% endif %}>{{ cat.nombre }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="disponible">Disponible</label>
+                <select id="disponible" name="disponible">
+                    <option value="true" {% if servicio.disponible %}selected{% endif %}>Sí</option>
+                    <option value="false" {% if not servicio.disponible %}selected{% endif %}>No</option>
+                </select>
+
+                <label for="imagen">Cambiar foto (opcional)</label>
+                <input type="file" id="imagen" name="imagen" accept="image/*">
+
+                <button type="submit">Guardar cambios</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.form-producto').addEventListener('submit', function (e) {
+            const descripcion = document.getElementById('descripcion').value.trim();
+            if (!descripcion) {
+                const continuar = confirm(
+                    'Falta completar la descripción/precio. ¿Querés guardarlo igual y completarlo después?'
+                );
+                if (!continuar) {
+                    e.preventDefault();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

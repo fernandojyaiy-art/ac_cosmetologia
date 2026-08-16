@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Nuevo producto - Ac Cosmetología</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="admin-content">
+        <h1>Agregar producto nuevo</h1>
+        <a href="/admin/panel" class="volver-panel">← Volver al panel</a>
+
+        <div class="admin-bloque">
+            <form method="post" action="/admin/nuevo-producto" enctype="multipart/form-data" class="form-producto">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre" required>
+
+                <label for="descripcion">Descripción</label>
+                <textarea id="descripcion" name="descripcion"></textarea>
+
+                <label for="precio">Precio</label>
+                <input type="number" step="0.01" id="precio" name="precio" required>
+
+                <label for="categoria_id">Categoría</label>
+                <select id="categoria_id" name="categoria_id" required>
+                    {% for cat in categorias %}
+                    <option value="{{ cat.id }}">{{ cat.nombre }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="marca_id">Marca</label>
+                <select id="marca_id" name="marca_id">
+                    <option value="">— Sin marca —</option>
+                    {% for marca in marcas %}
+                    <option value="{{ marca.id }}">{{ marca.nombre }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="disponible">Disponible</label>
+                <select id="disponible" name="disponible">
+                    <option value="true">Sí</option>
+                    <option value="false">No</option>
+                </select>
+
+                <label for="imagen">Foto</label>
+                <input type="file" id="imagen" name="imagen" accept="image/*">
+
+                <button type="submit">Crear producto</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.form-producto').addEventListener('submit', function (e) {
+            const descripcion = document.getElementById('descripcion').value.trim();
+            const precio = document.getElementById('precio').value;
+
+            if (!descripcion || !precio || parseFloat(precio) === 0) {
+                const continuar = confirm(
+                    'Falta completar la descripción o el precio. ¿Querés subirlo igual y completarlo después?'
+                );
+                if (!continuar) {
+                    e.preventDefault();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Categorías y marcas - Ac Cosmetología</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="admin-content">
+        <h1>Categorías y marcas</h1>
+        <a href="/admin/panel" class="volver-panel">← Volver al panel</a>
+
+        <div class="admin-bloque">
+            <h2>Categorías</h2>
+            <ul class="admin-lista-chica">
+                {% for cat in categorias %}
+                <li>
+                    {{ cat.nombre }}
+                    <a href="/admin/eliminar-categoria/{{ cat.id }}" class="btn-quitar" onclick="return confirm('¿Eliminar categoría {{ cat.nombre }}?')">✕</a>
+                </li>
+                {% else %}
+                <li>Todavía no hay categorías.</li>
+                {% endfor %}
+            </ul>
+            <form method="post" action="/admin/categorias/nueva" class="form-inline">
+                <input type="text" name="nombre" placeholder="Nueva categoría" required>
+                <button type="submit">Agregar</button>
+            </form>
+        </div>
+
+        <div class="admin-bloque">
+            <h2>Marcas</h2>
+            <ul class="admin-lista-chica">
+                {% for marca in marcas %}
+                <li>
+                    {{ marca.nombre }}
+                    <a href="/admin/eliminar-marca/{{ marca.id }}" class="btn-quitar" onclick="return confirm('¿Eliminar marca {{ marca.nombre }}?')">✕</a>
+                </li>
+                {% else %}
+                <li>Todavía no hay marcas.</li>
+                {% endfor %}
+            </ul>
+            <form method="post" action="/admin/marcas/nueva" class="form-inline">
+                <input type="text" name="nombre" placeholder="Nueva marca" required>
+                <button type="submit">Agregar</button>
+            </form>
+        </div>
+        <div class="admin-bloque">
+            <h2>Categorías de servicios</h2>
+            <ul class="admin-lista-chica">
+                {% for cat in categorias_servicios %}
+                <li>
+                    {{ cat.nombre }}
+                    <a href="/admin/eliminar-categoria-servicio/{{ cat.id }}" class="btn-quitar" onclick="return confirm('¿Eliminar categoría {{ cat.nombre }}?')">✕</a>
+                </li>
+                {% else %}
+                <li>Todavía no hay categorías de servicios.</li>
+                {% endfor %}
+            </ul>
+            <form method="post" action="/admin/categorias-servicios/nueva" class="form-inline">
+                <input type="text" name="nombre" placeholder="Nueva categoría de servicio" required>
+                <button type="submit">Agregar</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

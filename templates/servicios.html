@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios de Estética</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header id="inicio">
+        <img src="/static/imagenes/logo-1.jpeg" alt="Logo Estética" class="logo">
+        <h1>Servicios de Estética</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Inicio</a></li>
+                <li><a href="/servicios">Servicios</a></li>
+                <li><a href="/contacto">Contacto</a></li>
+                <li><a href="/productos">Productos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% set hay_servicios = namespace(valor=false) %}
+
+        <h2>Nuestros Servicios</h2>
+        <ul>
+            {% for categoria in categorias %}
+                {% set servicios_disponibles = categoria.servicios | selectattr("disponible") | list %}
+                {% if servicios_disponibles %}
+                <li><a href="#cat-{{ categoria.id }}">{{ categoria.nombre }}</a></li>
+                {% endif %}
+            {% endfor %}
+            <li><a href="#informacion_importante">Información Importante</a></li>
+        </ul>
+    </main>
+
+    {% for categoria in categorias %}
+        {% set servicios_disponibles = categoria.servicios | selectattr("disponible") | list %}
+        {% if servicios_disponibles %}
+            {% set hay_servicios.valor = true %}
+            <section id="cat-{{ categoria.id }}">
+                <h2>{{ categoria.nombre }}</h2>
+                <ul class="lista-servicios">
+                    {% for servicio in servicios_disponibles %}
+                    <li class="servicios">
+                        {% if servicio.imagen %}
+                        <img src="{{ servicio.imagen }}" alt="{{ servicio.nombre }}">
+                        {% endif %}
+                        <h3>{{ servicio.nombre }}</h3>
+                        {% if servicio.descripcion %}
+                        <p>{{ servicio.descripcion }}</p>
+                        {% endif %}
+                        <a href="https://wa.me/5491124038046?text=Hola,%20quiero%20consultar%20por%20el%20servicio:%20{{ servicio.nombre }}"
+                           class="btn-wsp" target="_blank" rel="noopener">
+                            Comunicate por WhatsApp
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </section>
+        {% endif %}
+    {% endfor %}
+
+    {% if not hay_servicios.valor %}
+    <p>Todavía no hay servicios cargados.</p>
+    {% endif %}
+
+    <!-- Información importante: fija, no sale de la base -->
+    <section id="informacion_importante">
+        <h2><strong>Información Importante</strong></h2>
+        <h4>Antes de reservar cualquier tratamiento, es fundamental que leas la siguiente información:</h4>
+        <ul class="lista-servicios">
+            <li>Consulta previa: Recomendamos una consulta inicial para evaluar tu piel y determinar el tratamiento más adecuado.</li>
+            <li>Contraindicaciones: Algunos tratamientos pueden no ser adecuados para personas con ciertas condiciones médicas. Por favor, infórmanos sobre cualquier problema de salud antes de reservar.</li>
+            <li>Cuidado post-tratamiento: Sigue las indicaciones proporcionadas por nuestro personal para asegurar los mejores resultados y evitar complicaciones.</li>
+            <li>Política de cancelación: Si necesitas cancelar o reprogramar tu cita, por favor avísanos con al menos 24 horas de antelación.</li>
+        </ul>
+    </section>
+
+    <p><a href="#inicio">Volver al inicio</a></p>
+    <footer>
+        <p>© 2026 Centro de Estética</p>
+        <div class="contacto-lista">
+            <a href="https://wa.me/5491124038046" target="_blank" rel="noopener" class="contacto-fila">
+                <span class="contacto-icono">💬</span>
+                <span class="contacto-texto">
+                    <span class="contacto-etiqueta">WhatsApp</span>
+                    <span class="contacto-dato">Escribinos</span>
+                </span>
+            </a>
+            <a href="https://www.instagram.com/cosmetologa.ac/" target="_blank" rel="noopener" class="contacto-fila">
+                <span class="contacto-icono">📸</span>
+                <span class="contacto-texto">
+                    <span class="contacto-etiqueta">Instagram</span>
+                    <span class="contacto-dato">@cosmetologa.ac</span>
+                </span>
+            </a>
+        </div>
+    </footer>
+</body>
+</html>
