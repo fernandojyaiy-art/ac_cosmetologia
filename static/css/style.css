@@ -834,3 +834,22 @@ a:hover {
    header nav ul li a:visited {
     color: var(--color-header-texto);
 }
+
+/* Arreglo: los botones que son <a> (acciones del panel, header
+   del admin, "volver al panel", links dentro de la tabla) tienen
+   que conservar SU color propio aunque estén "visitados" */
+.acciones-panel a:visited {
+    color: #fff;
+}
+
+.admin-header a:visited {
+    color: #fff;
+}
+
+.volver-panel:visited {
+    color: var(--color-principal);
+}
+
+.tabla-panel td a:visited {
+    color: var(--color-principal);
+}
