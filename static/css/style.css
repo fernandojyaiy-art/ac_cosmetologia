@@ -825,4 +825,11 @@ a:visited {
 
 a:hover {
     color: var(--color-acento);
+}/* Arreglo: los links del menú, aunque estén "visitados", tienen
+   que seguir en color claro (marfil), no heredar el marrón de
+   los links sueltos */
+
+
+   header nav ul li a:visited {
+    color: var(--color-header-texto);
 }
