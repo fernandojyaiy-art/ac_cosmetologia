@@ -132,15 +132,16 @@ footer {
 
 /*logo*/
 .logo {
+    background-image: url('/static/imagenes/logo.jpeg');
+    background-size: 130%;
+    background-position: center;
+    background-repeat: no-repeat;
     background-color: var(--color-fondo-logo);
-    padding: 10px;
+    width: 140px;
+    height: 140px;
     border-radius: 6px;
-    width: 90px;
-    height: auto;
-    display: block;
     margin: 0 auto 8px auto;
 }
-
 /* ESTILOS ESPECÍFICOS PARA SERVICIOS. */
 
 
