@@ -59,10 +59,15 @@
                                class="btn-wsp" target="_blank" rel="noopener">
                                 Comunicate por WhatsApp
                             </a>
-
-                            <button class="btn-agregar-carrito" data-nombre="{{ producto.nombre }}">
-                                Agregar al carrito
-                            </button>
+                            
+<div class="selector-cantidad">
+    <button type="button" class="btn-cantidad" data-accion="restar">−</button>
+    <span class="cantidad-valor">1</span>
+    <button type="button" class="btn-cantidad" data-accion="sumar">+</button>
+</div>
+<button class="btn-agregar-carrito" data-nombre="{{ producto.nombre }}" data-precio="{{ producto.precio }}">
+    Agregar al carrito
+</button>
                         </li>
                         {% endfor %}
                     </ul>
@@ -96,18 +101,48 @@
         </div>
     </footer>
 
+    <!-- Botón flotante del carrito -->
     <button id="boton-carrito-flotante" aria-label="Ver carrito">
         🛒
         <span id="contador-carrito">0</span>
     </button>
 
+    <!-- Panel del carrito -->
     <div id="panel-carrito">
-        <h3>Tu pedido</h3>
-        <ul id="lista-carrito"></ul>
-        <div class="panel-carrito-acciones">
-            <button id="btn-vaciar-carrito">Vaciar carrito</button>
-            <button id="btn-enviar-pedido">Enviar pedido por WhatsApp</button>
+
+        <!-- Paso 1: lista del carrito -->
+        <div id="panel-carrito-lista">
+            <h3>Tu pedido</h3>
+            <ul id="lista-carrito"></ul>
+            <div class="total-carrito-fila">
+                <span>Total</span>
+                <span id="total-carrito">$0,00</span>
+            </div>
+            <div class="panel-carrito-acciones">
+                <button id="btn-vaciar-carrito">Vaciar carrito</button>
+                <button id="btn-confirmar-pedido">Confirmar pedido</button>
+            </div>
         </div>
+
+        <!-- Paso 2: confirmación con datos de transferencia -->
+        <div id="panel-carrito-confirmacion">
+            <button class="btn-volver-chico" id="btn-volver-carrito">← Volver al carrito</button>
+            <h3>Resumen del pedido</h3>
+            <div id="resumen-confirmacion"></div>
+            <div class="total-confirmacion-fila">
+                <span>Total</span>
+                <span id="total-confirmacion">$0,00</span>
+            </div>
+
+            <p class="aviso-transferencia">
+                El pedido se prepara una vez que llega la transferencia. Después de pagar, mandanos el comprobante por WhatsApp.
+            </p>
+            <p>Transferí a este alias:</p>
+            <div class="alias-box" id="alias-transferencia">ALIAS</div>
+
+            <button id="btn-enviar-comprobante">Ya transferí, enviar comprobante por WhatsApp</button>
+        </div>
+
     </div>
 
     <script src="/static/js/carrito.js"></script>

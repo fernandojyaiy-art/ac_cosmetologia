@@ -84,7 +84,7 @@ def form_nuevo_producto(request: Request, db: Session = Depends(get_db)):
 def crear_producto_form(
     request: Request,
     nombre: str = Form(...),
-    descripcion: str = Form(...),
+    descripcion: str = Form(""),
     precio: float = Form(...),
     categoria_id: int = Form(...),
     marca_id: str = Form(""),
@@ -165,7 +165,7 @@ def guardar_edicion(
     producto_id: int,
     request: Request,
     nombre: str = Form(...),
-    descripcion: str = Form(...),
+    descripcion: str = Form(""),
     precio: float = Form(...),
     categoria_id: int = Form(...),
     marca_id: str = Form(""),

@@ -853,3 +853,221 @@ a:hover {
 .tabla-panel td a:visited {
     color: var(--color-principal);
 }
+/* SELECTOR DE CANTIDAD */
+.selector-cantidad {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.btn-cantidad {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--color-claro);
+  background-color: #fff;
+  color: var(--color-principal);
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease;
+}
+
+.btn-cantidad:hover {
+  background-color: var(--color-fondo);
+}
+
+.cantidad-valor {
+  min-width: 20px;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* TOTAL EN EL PANEL DEL CARRITO */
+#total-carrito {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.total-carrito-fila {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-top: 1px solid var(--color-claro);
+  margin-top: 5px;
+}
+
+/* PASO DE CONFIRMACIÓN */
+#panel-carrito-confirmacion {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#resumen-confirmacion p {
+  font-size: 14px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--color-claro);
+}
+
+.total-confirmacion-fila {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 16px;
+  padding-top: 5px;
+}
+
+.aviso-transferencia {
+  font-size: 13px;
+  color: var(--color-acento);
+  line-height: 1.4;
+}
+
+.alias-box {
+  background-color: var(--color-fondo);
+  border-radius: var(--radio-boton);
+  padding: 10px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 16px;
+  user-select: all;
+}
+
+.btn-volver-chico {
+  background: none;
+  border: none;
+  color: var(--color-acento);
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+}
+
+#btn-enviar-comprobante {
+  background-color: #25D366;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: var(--radio-boton);
+  font-weight: 600;
+  cursor: pointer;
+}
+/* SELECTOR DE CANTIDAD */
+.selector-cantidad {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.btn-cantidad {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--color-claro);
+  background-color: #fff;
+  color: var(--color-principal);
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease;
+}
+
+.btn-cantidad:hover {
+  background-color: var(--color-fondo);
+}
+
+.cantidad-valor {
+  min-width: 20px;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* TOTAL EN EL PANEL DEL CARRITO */
+#total-carrito {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.total-carrito-fila {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-top: 1px solid var(--color-claro);
+  margin-top: 5px;
+}
+
+/* PASO DE CONFIRMACIÓN */
+#panel-carrito-confirmacion {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#resumen-confirmacion p {
+  font-size: 14px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--color-claro);
+}
+
+.total-confirmacion-fila {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 16px;
+  padding-top: 5px;
+}
+
+.aviso-transferencia {
+  font-size: 13px;
+  color: var(--color-acento);
+  line-height: 1.4;
+}
+
+.alias-box {
+  background-color: var(--color-fondo);
+  border-radius: var(--radio-boton);
+  padding: 10px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 16px;
+  user-select: all;
+}
+
+.btn-volver-chico {
+  background: none;
+  border: none;
+  color: var(--color-acento);
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+}
+
+#btn-enviar-comprobante {
+  background-color: #25D366;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: var(--radio-boton);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Arreglo: el contenedor del paso 1 del carrito necesita su
+   propio flex-column, ya no lo hereda directo de #panel-carrito */
+#panel-carrito-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
