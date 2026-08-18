@@ -8,11 +8,14 @@
     box-sizing: border-box;
 }
 :root {
-    --color-principal: #764b36;
-    --color-fondo: #efe7dd;
-    --color-claro: #ccc7a9;
-    --color-texto: #333;
-    --color-header-texto: #fadddd;
+    --color-header-fondo: #171412;   /* Espresso muy oscuro */
+    --color-principal: #3B2B23;      /* Chocolate — títulos y textos destacados */
+    --color-acento: #8C7A67;         /* Taupe cálido — detalles/acentos */
+    --color-fondo: #F2EAE1;          /* Beige arena muy claro — fondo de secciones */
+    --color-fondo-logo: #F7F2EB;     /* Marfil — fondo del logo */
+    --color-claro: #C5B5A5;          /* Beige/taupe — subrayados y detalles */
+    --color-texto: #3B2B23;
+    --color-header-texto: #F7F2EB;
     --fuente-titulos: 'Cormorant Garamond', Georgia, serif;
     --radio-boton: 8px;
     --sombra-tarjeta: 0 3px 10px rgba(0, 0, 0, 0.08);
@@ -35,31 +38,24 @@ body {
 
 /* HEADER */
 header {
-    background-color: var(--color-principal);
+    background-color: var(--color-header-fondo);
     color: var(--color-header-texto);
     padding: 10px 20px;
     position: sticky;
     top: 0;
     z-index: 500;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
 /* NAVEGACIÓN */
-nav ul {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-    margin-top: 10px;
+header nav ul li a {
+    color: var(--color-header-texto);
+    padding-bottom: 3px;
+    transition: border-bottom 0.2s ease;
 }
 
-nav a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-nav a:hover {
-    text-decoration: underline;
+header nav ul li a:hover {
+    border-bottom: 2px solid var(--color-claro);
 }
 
 /* CONTENIDO */
@@ -96,27 +92,35 @@ footer {
     font-size: 14px;
 }
    
-/* BOTÓN DE WHATSAPP */
+
 .btn-wsp {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   margin-top: 12px;
-  padding: 10px 16px;
-  background-color: #25D366;
-  color: #fff;
+  padding: 8px 4px;
+  background-color: transparent;
+  color: var(--color-principal);
   text-decoration: none;
-  border-radius: var(--radio-boton);
-  font-weight: 600;
+  font-weight: 700;
   text-align: center;
-  transition: background-color 0.2s ease, transform 0.15s ease;
+  border-bottom: 2px solid var(--color-claro);
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
-
+ 
 .btn-wsp::before {
-  content: "💬 ";
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%233B2B23'><path d='M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.05L2 22l5.05-1.32A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.2 14.2c-.22.62-1.28 1.2-1.77 1.24-.46.05-1.03.07-1.66-.1-.38-.1-.87-.28-1.5-.55-2.63-1.14-4.34-3.8-4.47-3.98-.13-.18-1.07-1.42-1.07-2.71s.68-1.92.92-2.18c.24-.26.53-.32.7-.32h.5c.16 0 .38-.03.58.44.22.53.75 1.82.82 1.95.07.13.11.29.02.47-.09.18-.14.29-.27.45-.14.16-.29.36-.41.48-.14.14-.28.28-.12.55.16.27.71 1.17 1.52 1.9 1.04.94 1.92 1.23 2.19 1.37.27.14.43.11.59-.07.16-.18.68-.79.86-1.06.18-.27.35-.22.59-.13.24.09 1.53.72 1.79.85.27.13.44.2.51.31.07.11.07.63-.15 1.25z'/></svg>");
+  background-size: contain;
+  background-repeat: no-repeat;
 }
-
+ 
 .btn-wsp:hover {
-  background-color: #1ebe5d;
-  transform: translateY(-2px);
+  color: var(--color-acento);
+  border-color: var(--color-acento);
 }
 .btn-wsp i {
   margin-right: 8px;
@@ -124,12 +128,17 @@ footer {
 .btn-wsp {
   align-self: flex-start;
 }
+
+
 /*logo*/
 .logo {
-  width: 90px;
-  height: auto;
-  display: block;
-  margin: 0 auto 8px auto;
+    background-color: var(--color-fondo-logo);
+    padding: 10px;
+    border-radius: 6px;
+    width: 90px;
+    height: auto;
+    display: block;
+    margin: 0 auto 8px auto;
 }
 
 /* ESTILOS ESPECÍFICOS PARA SERVICIOS. */
@@ -626,25 +635,33 @@ footer {
 
 /* BOTÓN DE INSTAGRAM */
 .btn-instagram {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   margin-top: 12px;
-  padding: 10px 16px;
-  background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af);
-  color: #fff;
+  padding: 8px 4px;
+  background: transparent;
+  color: var(--color-principal);
   text-decoration: none;
-  border-radius: var(--radio-boton);
-  font-weight: 600;
+  font-weight: 700;
   text-align: center;
-  transition: opacity 0.2s ease, transform 0.15s ease;
+  border-bottom: 2px solid var(--color-claro);
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
-
+ 
 .btn-instagram::before {
-  content: "📸 ";
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%233B2B23'><path d='M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.72 3.72 0 0 1-1.38-.9 3.72 3.72 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41 1.27-.06 1.65-.07 4.85-.07M12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.31-1.46.72-2.13 1.39A5.83 5.83 0 0 0 .62 4.14C.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.79.72 1.46 1.39 2.13a5.83 5.83 0 0 0 2.13 1.39c.76.3 1.64.5 2.91.56 1.28.06 1.69.07 4.95.07s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56a5.83 5.83 0 0 0 2.13-1.39 5.83 5.83 0 0 0 1.39-2.13c.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91a5.83 5.83 0 0 0-1.39-2.13A5.83 5.83 0 0 0 19.86.63c-.76-.3-1.64-.5-2.91-.56C15.67.01 15.26 0 12 0zm0 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84zm0 10.16A4 4 0 1 1 16 12a4 4 0 0 1-4 4zm6.41-10.4a1.44 1.44 0 1 1-1.44-1.44 1.44 1.44 0 0 1 1.44 1.44z'/></svg>");
+  background-size: contain;
+  background-repeat: no-repeat;
 }
-
+ 
 .btn-instagram:hover {
-  opacity: 0.9;
-  transform: translateY(-2px);
+  color: var(--color-acento);
+  border-color: var(--color-acento);
 }
 
 .foto-anto {
@@ -717,4 +734,95 @@ footer {
 .servicios p {
   white-space: pre-line;
   text-align: left;
+}
+
+/* ============================================================
+   ÍCONOS REALES en las filas de contacto (ícono + etiqueta + dato)
+   Agregá esto al final de tu style.css (no reemplaza nada, es nuevo)
+   ============================================================ */
+
+.contacto-icono.icono-whatsapp,
+.contacto-icono.icono-instagram {
+  font-size: 0; /* oculta el texto/emoji que quede adentro del span */
+}
+
+.contacto-icono.icono-whatsapp::before {
+  content: "";
+  display: block;
+  width: 20px;
+  height: 20px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%233B2B23'><path d='M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.05L2 22l5.05-1.32A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.2 14.2c-.22.62-1.28 1.2-1.77 1.24-.46.05-1.03.07-1.66-.1-.38-.1-.87-.28-1.5-.55-2.63-1.14-4.34-3.8-4.47-3.98-.13-.18-1.07-1.42-1.07-2.71s.68-1.92.92-2.18c.24-.26.53-.32.7-.32h.5c.16 0 .38-.03.58.44.22.53.75 1.82.82 1.95.07.13.11.29.02.47-.09.18-.14.29-.27.45-.14.16-.29.36-.41.48-.14.14-.28.28-.12.55.16.27.71 1.17 1.52 1.9 1.04.94 1.92 1.23 2.19 1.37.27.14.43.11.59-.07.16-.18.68-.79.86-1.06.18-.27.35-.22.59-.13.24.09 1.53.72 1.79.85.27.13.44.2.51.31.07.11.07.63-.15 1.25z'/></svg>");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.contacto-icono.icono-instagram::before {
+  content: "";
+  display: block;
+  width: 20px;
+  height: 20px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%233B2B23'><path d='M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.72 3.72 0 0 1-1.38-.9 3.72 3.72 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41 1.27-.06 1.65-.07 4.85-.07M12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.31-1.46.72-2.13 1.39A5.83 5.83 0 0 0 .62 4.14C.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.79.72 1.46 1.39 2.13a5.83 5.83 0 0 0 2.13 1.39c.76.3 1.64.5 2.91.56 1.28.06 1.69.07 4.95.07s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56a5.83 5.83 0 0 0 2.13-1.39 5.83 5.83 0 0 0 1.39-2.13c.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91a5.83 5.83 0 0 0-1.39-2.13A5.83 5.83 0 0 0 19.86.63c-.76-.3-1.64-.5-2.91-.56C15.67.01 15.26 0 12 0zm0 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84zm0 10.16A4 4 0 1 1 16 12a4 4 0 0 1-4 4zm6.41-10.4a1.44 1.44 0 1 1-1.44-1.44 1.44 1.44 0 0 1 1.44 1.44z'/></svg>");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+
+/* ============================================================
+   Arreglo: títulos DENTRO del header tienen que usar el color
+   claro (marfil), no el chocolate oscuro que usan los títulos
+   normales del resto del sitio.
+   ============================================================ */
+header h1,
+header h2,
+header h3,
+header p {
+    color: var(--color-header-texto);
+}
+
+/* Menú horizontal, sin viñetas, centrado */
+header nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 0;
+    margin: 10px 0 0 0;
+}
+
+/* ============================================================
+   Arreglo: títulos DENTRO del header tienen que usar el color
+   claro (marfil), no el chocolate oscuro que usan los títulos
+   normales del resto del sitio.
+   ============================================================ */
+header h1,
+header h2,
+header h3,
+header p {
+    color: var(--color-header-texto);
+}
+
+/* Menú horizontal, sin viñetas, centrado */
+header nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 0;
+    margin: 10px 0 0 0;
+}
+
+/* Color por defecto para cualquier link que no tenga una clase
+   propia (ej: "Volver al inicio", el índice de categorías) */
+a {
+    color: var(--color-principal);
+}
+
+a:visited {
+    color: var(--color-principal);
+}
+
+a:hover {
+    color: var(--color-acento);
 }
