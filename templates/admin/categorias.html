@@ -10,13 +10,20 @@
         <h1>Categorías y marcas</h1>
         <a href="/admin/panel" class="volver-panel">← Volver al panel</a>
 
+        {% if error %}
+        <p class="error-login">{{ error }}</p>
+        {% endif %}
+
         <div class="admin-bloque">
             <h2>Categorías</h2>
             <ul class="admin-lista-chica">
                 {% for cat in categorias %}
                 <li>
                     {{ cat.nombre }}
-                    <a href="/admin/eliminar-categoria/{{ cat.id }}" class="btn-quitar" onclick="return confirm('¿Eliminar categoría {{ cat.nombre }}?')">✕</a>
+                    <span>
+                        <a href="/admin/editar-categoria/{{ cat.id }}">Editar</a>
+                        <a href="/admin/eliminar-categoria/{{ cat.id }}" class="btn-quitar" onclick="return confirm('¿Eliminar categoría {{ cat.nombre }}?')">✕</a>
+                    </span>
                 </li>
                 {% else %}
                 <li>Todavía no hay categorías.</li>
@@ -34,7 +41,10 @@
                 {% for marca in marcas %}
                 <li>
                     {{ marca.nombre }}
-                    <a href="/admin/eliminar-marca/{{ marca.id }}" class="btn-quitar" onclick="return confirm('¿Eliminar marca {{ marca.nombre }}?')">✕</a>
+                    <span>
+                        <a href="/admin/editar-marca/{{ marca.id }}">Editar</a>
+                        <a href="/admin/eliminar-marca/{{ marca.id }}" class="btn-quitar" onclick="return confirm('¿Eliminar marca {{ marca.nombre }}?')">✕</a>
+                    </span>
                 </li>
                 {% else %}
                 <li>Todavía no hay marcas.</li>
@@ -45,13 +55,17 @@
                 <button type="submit">Agregar</button>
             </form>
         </div>
+
         <div class="admin-bloque">
             <h2>Categorías de servicios</h2>
             <ul class="admin-lista-chica">
                 {% for cat in categorias_servicios %}
                 <li>
                     {{ cat.nombre }}
-                    <a href="/admin/eliminar-categoria-servicio/{{ cat.id }}" class="btn-quitar" onclick="return confirm('¿Eliminar categoría {{ cat.nombre }}?')">✕</a>
+                    <span>
+                        <a href="/admin/editar-categoria-servicio/{{ cat.id }}">Editar</a>
+                        <a href="/admin/eliminar-categoria-servicio/{{ cat.id }}" class="btn-quitar" onclick="return confirm('¿Eliminar categoría {{ cat.nombre }}?')">✕</a>
+                    </span>
                 </li>
                 {% else %}
                 <li>Todavía no hay categorías de servicios.</li>

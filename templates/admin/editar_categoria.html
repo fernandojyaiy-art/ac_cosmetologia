@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar categoría - Ac Cosmetología</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="admin-content">
+        <h1>Editar categoría</h1>
+        <a href="/admin/categorias" class="volver-panel">← Volver a Categorías</a>
+
+        <div class="admin-bloque">
+            <form method="post" action="/admin/editar-categoria/{{ categoria.id }}" class="form-producto">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre" value="{{ categoria.nombre }}" required>
+
+                <button type="submit">Guardar cambios</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

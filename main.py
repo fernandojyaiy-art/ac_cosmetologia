@@ -211,7 +211,7 @@ def toggle_agotado(producto_id: int, request: Request, db: Session = Depends(get
 
 
 @app.get("/admin/categorias")
-def ver_categorias(request: Request, db: Session = Depends(get_db)):
+def ver_categorias(request: Request, error: str = None, db: Session = Depends(get_db)):
     if not request.session.get("logueado"):
         return RedirectResponse("/admin/login")
     categorias = db.query(models.Categoria).all()
@@ -220,10 +220,14 @@ def ver_categorias(request: Request, db: Session = Depends(get_db)):
     return templates.TemplateResponse(
         request,
         "admin/categorias.html",
-        {"categorias": categorias, "marcas": marcas, "categorias_servicios": categorias_servicios}
+        {
+            "categorias": categorias,
+            "marcas": marcas,
+            "categorias_servicios": categorias_servicios,
+            "error": error,
+        },
     )
-
-
+ 
 @app.post("/admin/categorias/nueva")
 def crear_categoria(request: Request, nombre: str = Form(...), db: Session = Depends(get_db)):
     if not request.session.get("logueado"):
@@ -239,14 +243,47 @@ def crear_categoria(request: Request, nombre: str = Form(...), db: Session = Dep
 def eliminar_categoria(categoria_id: int, request: Request, db: Session = Depends(get_db)):
     if not request.session.get("logueado"):
         return RedirectResponse("/admin/login")
+ 
     tiene_productos = db.query(models.Producto).filter(models.Producto.categoria_id == categoria_id).first()
     if tiene_productos:
-        return RedirectResponse("/admin/categorias", status_code=303)
+        return RedirectResponse(
+            "/admin/categorias?error=No se puede eliminar: esa categoria tiene productos cargados. Reasignalos a otra categoria primero.",
+            status_code=303)
+ 
     categoria = db.query(models.Categoria).filter(models.Categoria.id == categoria_id).first()
     if categoria:
         db.delete(categoria)
         db.commit()
     return RedirectResponse("/admin/categorias", status_code=303)
+
+
+@app.get("/admin/editar-categoria/{categoria_id}")
+def form_editar_categoria(categoria_id: int, request: Request, db: Session = Depends(get_db)):
+    if not request.session.get("logueado"):
+        return RedirectResponse("/admin/login")
+    categoria = db.query(models.Categoria).filter(models.Categoria.id == categoria_id).first()
+    return templates.TemplateResponse(request, "admin/editar_categoria.html", {"categoria": categoria})
+ 
+ 
+@app.post("/admin/editar-categoria/{categoria_id}")
+def guardar_edicion_categoria(
+    categoria_id: int,
+    request: Request,
+    nombre: str = Form(...),
+    db: Session = Depends(get_db),
+):
+    if not request.session.get("logueado"):
+        return RedirectResponse("/admin/login")
+ 
+    categoria = db.query(models.Categoria).filter(models.Categoria.id == categoria_id).first()
+    if categoria:
+        categoria.nombre = nombre
+        db.commit()
+ 
+    return RedirectResponse("/admin/categorias", status_code=303)
+ 
+ 
+
 
 
 @app.post("/admin/marcas/nueva")
@@ -264,15 +301,45 @@ def crear_marca(request: Request, nombre: str = Form(...), db: Session = Depends
 def eliminar_marca(marca_id: int, request: Request, db: Session = Depends(get_db)):
     if not request.session.get("logueado"):
         return RedirectResponse("/admin/login")
+ 
     tiene_productos = db.query(models.Producto).filter(models.Producto.marca_id == marca_id).first()
     if tiene_productos:
-        return RedirectResponse("/admin/categorias", status_code=303)
+        return RedirectResponse(
+            "/admin/categorias?error=No se puede eliminar: esa marca tiene productos cargados. Reasignalos a otra marca primero.",
+            status_code=303,
+        )
+ 
     marca = db.query(models.Marca).filter(models.Marca.id == marca_id).first()
     if marca:
         db.delete(marca)
         db.commit()
     return RedirectResponse("/admin/categorias", status_code=303)
 
+# NUEVO: editar marca
+ 
+@app.get("/admin/editar-marca/{marca_id}")
+def form_editar_marca(marca_id: int, request: Request, db: Session = Depends(get_db)):
+    if not request.session.get("logueado"):
+        return RedirectResponse("/admin/login")
+    marca = db.query(models.Marca).filter(models.Marca.id == marca_id).first()
+    return templates.TemplateResponse(request, "admin/editar_marca.html", {"marca": marca})
+ 
+ 
+@app.post("/admin/editar-marca/{marca_id}")
+def guardar_edicion_marca(
+    marca_id: int,
+    request: Request,
+    nombre: str = Form(...),
+    db: Session = Depends(get_db),
+):
+    if not request.session.get("logueado"):
+        return RedirectResponse("/admin/login")
+    marca = db.query(models.Marca).filter(models.Marca.id == marca_id).first()
+    if marca:
+        marca.nombre = nombre
+        db.commit()
+    return RedirectResponse("/admin/categorias", status_code=303)
+ 
 
 # ============================================================
 # ADMIN: SERVICIOS (sin carrito, mismo patrón que productos)
@@ -417,11 +484,41 @@ def crear_categoria_servicio(request: Request, nombre: str = Form(...), db: Sess
 def eliminar_categoria_servicio(categoria_id: int, request: Request, db: Session = Depends(get_db)):
     if not request.session.get("logueado"):
         return RedirectResponse("/admin/login")
+ 
     tiene_servicios = db.query(models.Servicio).filter(models.Servicio.categoria_id == categoria_id).first()
     if tiene_servicios:
-        return RedirectResponse("/admin/categorias", status_code=303)
+        return RedirectResponse(
+            "/admin/categorias?error=No se puede eliminar: esa categoria tiene servicios cargados. Reasignalos a otra categoria primero.",
+            status_code=303,
+        )
+ 
     categoria = db.query(models.CategoriaServicio).filter(models.CategoriaServicio.id == categoria_id).first()
     if categoria:
         db.delete(categoria)
+        db.commit()
+    return RedirectResponse("/admin/categorias", status_code=303)
+ 
+ # NUEVO: editar categoría de servicio
+ 
+@app.get("/admin/editar-categoria-servicio/{categoria_id}")
+def form_editar_categoria_servicio(categoria_id: int, request: Request, db: Session = Depends(get_db)):
+    if not request.session.get("logueado"):
+        return RedirectResponse("/admin/login")
+    categoria = db.query(models.CategoriaServicio).filter(models.CategoriaServicio.id == categoria_id).first()
+    return templates.TemplateResponse(request, "admin/editar_categoria_servicio.html", {"categoria": categoria})
+ 
+ 
+@app.post("/admin/editar-categoria-servicio/{categoria_id}")
+def guardar_edicion_categoria_servicio(
+    categoria_id: int,
+    request: Request,
+    nombre: str = Form(...),
+    db: Session = Depends(get_db),
+):
+    if not request.session.get("logueado"):
+        return RedirectResponse("/admin/login")
+    categoria = db.query(models.CategoriaServicio).filter(models.CategoriaServicio.id == categoria_id).first()
+    if categoria:
+        categoria.nombre = nombre
         db.commit()
     return RedirectResponse("/admin/categorias", status_code=303)
