@@ -1071,3 +1071,11 @@ a:hover {
   flex-direction: column;
   gap: 10px;
 }
+
+/* Arreglo: alinear precio/botones al mismo nivel en todas las
+   tarjetas de productos y servicios, sin importar cuán larga
+   sea la descripción de cada una. */
+.producto p:not(.precio-producto):not(.marca-producto),
+.servicios p {
+  flex-grow: 1;
+}
