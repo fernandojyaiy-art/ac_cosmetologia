@@ -50,9 +50,7 @@
                             {% if producto.marca %}
                             <p class="marca-producto">{{ producto.marca.nombre }}</p>
                             {% endif %}
-                            {% if producto.descripcion %}
-                            <p>{{ producto.descripcion }}</p>
-                            {% endif %}
+                           {% if producto.descripcion %} <p class="texto-clamp">{{ producto.descripcion }}</p> <button type="button" class="btn-mas-info">Más info</button> {% endif %}
                             <p class="precio-producto">${{ "%.2f"|format(producto.precio) }}</p>
 
                             <a href="https://wa.me/5491124038046?text=Hola,%20quiero%20consultar%20por%20el%20producto:%20{{ producto.nombre }}"
@@ -146,5 +144,6 @@
     </div>
 
     <script src="/static/js/carrito.js"></script>
+    <script src="/static/js/mas-info.js"></script>
 </body>
 </html>

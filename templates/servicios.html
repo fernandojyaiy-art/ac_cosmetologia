@@ -48,9 +48,7 @@
                         <img src="{{ servicio.imagen }}" alt="{{ servicio.nombre }}">
                         {% endif %}
                         <h3>{{ servicio.nombre }}</h3>
-                        {% if servicio.descripcion %}
-                        <p>{{ servicio.descripcion }}</p>
-                        {% endif %}
+                        {% if servicio.descripcion %} <p class="texto-clamp">{{ servicio.descripcion }}</p> <button type="button" class="btn-mas-info">Más info</button> {% endif %}
                         <a href="https://wa.me/5491124038046?text=Hola,%20quiero%20consultar%20por%20el%20servicio:%20{{ servicio.nombre }}"
                            class="btn-wsp" target="_blank" rel="noopener">
                             Comunicate por WhatsApp
@@ -98,5 +96,6 @@
             </a>
         </div>
     </footer>
+    <script src="/static/js/mas-info.js"></script>
 </body>
 </html>

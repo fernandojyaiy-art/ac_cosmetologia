@@ -1079,3 +1079,34 @@ a:hover {
 .servicios p {
   flex-grow: 1;
 }
+
+/* Descripción recortada a 4 líneas, con "Más info" para desplegar */
+.texto-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex-grow: 0;
+}
+
+.texto-clamp.expandido {
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
+  display: block;
+}
+.btn-mas-info {
+  background: none;
+  border: none;
+  color: var(--color-acento);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  margin-top: -4px;
+}
+
+.btn-mas-info:hover {
+  text-decoration: underline;
+}
