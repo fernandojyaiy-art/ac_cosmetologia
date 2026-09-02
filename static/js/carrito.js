@@ -122,7 +122,16 @@ function generarMensajeWhatsappPedido() {
   const carrito = obtenerCarrito();
   if (carrito.length === 0) return;
 
-  let mensaje = "Hola! Este es mi pedido:%0A";
+  const inputNombre = document.getElementById("nombre-cliente");
+  const nombre = inputNombre.value.trim();
+
+  if (!nombre) {
+    alert("Contanos tu nombre antes de enviar el pedido.");
+    inputNombre.focus();
+    return;
+  }
+
+  let mensaje = `Hola! Soy ${nombre}, este es mi pedido:%0A`;
   carrito.forEach((item) => {
     mensaje += `- ${item.nombre} x${item.cantidad}%0A`;
   });
