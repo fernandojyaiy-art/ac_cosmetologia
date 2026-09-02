@@ -1,12 +1,10 @@
 // carrito.js
-// Carrito con cantidad, precios, total y paso de confirmación con
-// datos de transferencia (alias + WhatsApp para el comprobante).
+// Carrito con cantidad, precios, total y paso de confirmación.
+// El pedido se manda por WhatsApp con el detalle; el medio de pago
+// se coordina directamente en la conversación (no se fija en la web).
 
 const CARRITO_KEY = "carritoAC";
 const NUMERO_WHATSAPP = "5491124038046";
-
-// TODO: reemplazar por el alias/CBU real de Anto
-const ALIAS_TRANSFERENCIA = "anto.cen.mp";
 
 // --- Funciones de datos ---
 
@@ -90,7 +88,7 @@ function toggleCarrito() {
   volverAlCarrito();
 }
 
-// --- Paso de confirmación (transferencia) ---
+// --- Paso de confirmación ---
 
 function irAConfirmacion() {
   const carrito = obtenerCarrito();
@@ -111,7 +109,6 @@ function irAConfirmacion() {
   });
 
   document.getElementById("total-confirmacion").textContent = `$${formatearPrecio(calcularTotal(carrito))}`;
-  document.getElementById("alias-transferencia").textContent = ALIAS_TRANSFERENCIA;
 }
 
 function volverAlCarrito() {
@@ -121,11 +118,11 @@ function volverAlCarrito() {
   if (confirmEl) confirmEl.style.display = "none";
 }
 
-function generarMensajeWhatsappComprobante() {
+function generarMensajeWhatsappPedido() {
   const carrito = obtenerCarrito();
   if (carrito.length === 0) return;
 
-  let mensaje = "Hola! Ya hice la transferencia por este pedido, les paso el comprobante:%0A";
+  let mensaje = "Hola! Este es mi pedido:%0A";
   carrito.forEach((item) => {
     mensaje += `- ${item.nombre} x${item.cantidad}%0A`;
   });
@@ -185,5 +182,5 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btn-vaciar-carrito").addEventListener("click", vaciarCarrito);
   document.getElementById("btn-confirmar-pedido").addEventListener("click", irAConfirmacion);
   document.getElementById("btn-volver-carrito").addEventListener("click", volverAlCarrito);
-  document.getElementById("btn-enviar-comprobante").addEventListener("click", generarMensajeWhatsappComprobante);
+  document.getElementById("btn-enviar-pedido-final").addEventListener("click", generarMensajeWhatsappPedido);
 });
