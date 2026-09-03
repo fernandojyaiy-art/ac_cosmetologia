@@ -47,16 +47,7 @@ header {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
-/* NAVEGACIÓN */
-header nav ul li a {
-    color: var(--color-header-texto);
-    padding-bottom: 3px;
-    transition: border-bottom 0.2s ease;
-}
 
-header nav ul li a:hover {
-    border-bottom: 2px solid var(--color-claro);
-}
 
 /* CONTENIDO */
 main {
@@ -780,39 +771,8 @@ header p {
     color: var(--color-header-texto);
 }
 
-/* Menú horizontal, sin viñetas, centrado */
-header nav ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 20px;
-    padding: 0;
-    margin: 10px 0 0 0;
-}
 
-/* ============================================================
-   Arreglo: títulos DENTRO del header tienen que usar el color
-   claro (marfil), no el chocolate oscuro que usan los títulos
-   normales del resto del sitio.
-   ============================================================ */
-header h1,
-header h2,
-header h3,
-header p {
-    color: var(--color-header-texto);
-}
 
-/* Menú horizontal, sin viñetas, centrado */
-header nav ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 20px;
-    padding: 0;
-    margin: 10px 0 0 0;
-}
 
 /* Color por defecto para cualquier link que no tenga una clase
    propia (ej: "Volver al inicio", el índice de categorías) */
@@ -831,10 +791,7 @@ a:hover {
    los links sueltos */
 
 
-   header nav ul li a:visited {
-    color: var(--color-header-texto);
-}
-
+   
 /* Arreglo: los botones que son <a> (acciones del panel, header
    del admin, "volver al panel", links dentro de la tabla) tienen
    que conservar SU color propio aunque estén "visitados" */
@@ -1109,4 +1066,99 @@ a:hover {
 
 .btn-mas-info:hover {
   text-decoration: underline;
+}
+
+/* ============================================================
+   MENÚ HAMBURGUESA
+   Reemplazá el viejo bloque "header nav ul { ... }" por este
+   archivo completo (borrá también header nav ul li a y
+   header nav ul li a:hover/:visited viejos, quedan reemplazados).
+   ============================================================ */
+
+btn-menu-hamburguesa {
+  display: block;
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  background-color: var(--color-fondo-logo);
+  color: var(--color-header-fondo);
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 700;
+}
+
+
+#btn-menu-hamburguesa:hover {
+  opacity: 0.9;
+}
+
+#menu-panel {
+  display: none;
+  position: absolute;
+  top: 65px;
+  left: 20px;
+  background-color: #fff;
+  border-radius: var(--radio-boton);
+  box-shadow: var(--sombra-tarjeta-hover);
+  min-width: 220px;
+  padding: 8px 0;
+  z-index: 600;
+}
+
+#menu-panel.abierto {
+  display: block;
+}
+
+#menu-panel ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+}
+
+#menu-panel > ul > li {
+  border-bottom: 1px solid var(--color-claro);
+}
+
+#menu-panel > ul > li:last-child {
+  border-bottom: none;
+}
+
+#menu-panel a,
+#menu-panel a:visited {
+  display: block;
+  padding: 12px 20px;
+  color: var(--color-texto);
+  text-align: left;
+}
+
+#menu-panel a:hover {
+  background-color: var(--color-fondo);
+}
+
+/* Submenú de categorías, adentro del panel */
+#menu-panel .nav-submenu {
+  display: none;
+  position: static;
+  transform: none;
+  background-color: var(--color-fondo);
+  border: none;
+  border-radius: 0;
+  margin: 0;
+  padding: 0;
+}
+
+#menu-panel .nav-dropdown.abierto .nav-submenu {
+  display: block;
+}
+
+#menu-panel .nav-submenu li a {
+  padding-left: 36px;
+  font-size: 14px;
 }

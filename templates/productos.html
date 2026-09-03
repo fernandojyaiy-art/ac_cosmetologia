@@ -8,15 +8,23 @@
 </head>
 <body>
 
-    <header id="inicio">
+   <header id="inicio">
         <div class="logo" role="img" aria-label="Logo Ac Cosmetología"></div>
         <h1>Catálogo de Productos</h1>
-        <nav>
+        <button id="btn-menu-hamburguesa" aria-label="Abrir menú">☰</button>
+        <nav id="menu-panel">
             <ul>
                 <li><a href="/">Inicio</a></li>
                 <li><a href="/servicios">Servicios</a></li>
                 <li><a href="/contacto">Contacto</a></li>
-                <li><a href="/productos">Productos</a></li>
+                <li class="nav-dropdown">
+                    <a href="/productos" class="nav-dropdown-toggle">Productos ▾</a>
+                    <ul class="nav-submenu">
+                        {% for categoria in categorias %}
+                        <li><a href="#cat-{{ categoria.id }}">{{ categoria.nombre }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
             </ul>
         </nav>
     </header>
@@ -145,5 +153,6 @@
 
     <script src="/static/js/carrito.js"></script>
     <script src="/static/js/mas-info.js"></script>
+    <script src="/static/js/nav.js"></script>
 </body>
 </html>
