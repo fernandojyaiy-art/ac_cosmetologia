@@ -32,16 +32,6 @@
     <main>
         {% set hay_productos = namespace(valor=false) %}
 
-        <h2>Nuestros productos</h2>
-        <ul>
-            {% for categoria in categorias %}
-                {% set productos_disponibles = categoria.productos | selectattr("disponible") | list %}
-                {% if productos_disponibles %}
-                <li><a href="#cat-{{ categoria.id }}">{{ categoria.nombre }}</a></li>
-                {% endif %}
-            {% endfor %}
-        </ul>
-
         {% for categoria in categorias %}
             {% set productos_disponibles = categoria.productos | selectattr("disponible") | list %}
             {% if productos_disponibles %}
