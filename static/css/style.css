@@ -123,18 +123,28 @@ footer {
 
 /*logo*/
 .logo {
-    background-image: url('/static/imagenes/logo.jpeg');
+    background-image: url('/static/imagenes/logo_nuevo.jpeg');
     background-size: 130%;
     background-position: center;
     background-repeat: no-repeat;
     background-color: var(--color-fondo-logo);
-    width: 140px;
-    height: 140px;
-    border-radius: 6px;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
     margin: 0 auto 8px auto;
 }
-/* ESTILOS ESPECÍFICOS PARA SERVICIOS. */
-
+@media (max-width: 600px) {
+  .logo {
+    width: 65px;
+    height: 65px;
+  }
+  header h1 {
+    font-size: 22px;
+  }
+  header {
+    padding: 6px 12px;
+  }
+}
 
 .lista-servicios {
   display: grid;
@@ -1075,7 +1085,8 @@ a:hover {
    header nav ul li a:hover/:visited viejos, quedan reemplazados).
    ============================================================ */
 
-btn-menu-hamburguesa {
+/* Arreglo: el selector estaba mal escrito, le faltaba el # */
+#btn-menu-hamburguesa {
   display: block;
   position: absolute;
   top: 15px;
@@ -1091,6 +1102,19 @@ btn-menu-hamburguesa {
   z-index: 700;
 }
 
+/* Header más compacto en pantallas chicas (celu) */
+@media (max-width: 600px) {
+  .logo {
+    width: 90px;
+    height: 90px;
+  }
+  header h1 {
+    font-size: 26px;
+  }
+  header {
+    padding: 8px 15px;
+  }
+}
 
 #btn-menu-hamburguesa:hover {
   opacity: 0.9;
@@ -1161,4 +1185,11 @@ btn-menu-hamburguesa {
 #menu-panel .nav-submenu li a {
   padding-left: 36px;
   font-size: 14px;
+}
+
+.form-producto textarea {
+  min-height: 130px;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 15px;
 }
