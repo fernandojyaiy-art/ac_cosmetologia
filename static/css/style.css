@@ -1193,3 +1193,52 @@ a:hover {
   font-family: inherit;
   font-size: 15px;
 }
+
+/* ============================================================
+   GALERÍA DE FOTOS EN EL ADMIN (editar producto/servicio)
+   Agregá esto al final de tu style.css — son clases nuevas,
+   no reemplazan nada existente.
+   ============================================================ */
+
+.galeria-imagenes-admin {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.miniatura-admin {
+  position: relative;
+  width: 90px;
+  height: 90px;
+}
+
+.miniatura-admin img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: var(--sombra-tarjeta);
+}
+
+.btn-eliminar-miniatura {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  background-color: #c0392b;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.btn-eliminar-miniatura:hover {
+  background-color: #a93226;
+}

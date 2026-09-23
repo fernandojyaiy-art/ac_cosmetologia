@@ -11,9 +11,23 @@
         <a href="/admin/servicios" class="volver-panel">← Volver a Servicios</a>
 
         <div class="admin-bloque">
-            {% if servicio.imagen %}
-            <img src="{{ servicio.imagen }}" alt="{{ servicio.nombre }}" class="imagen-actual">
-            {% endif %}
+            <p><strong>Fotos actuales</strong></p>
+            <div class="galeria-imagenes-admin">
+                {% for img in servicio.imagenes %}
+                <div class="miniatura-admin">
+                    <img src="{{ img.ruta_imagen }}" alt="{{ servicio.nombre }}">
+                    <a href="/admin/eliminar-imagen-servicio/{{ img.id }}"
+                       class="btn-eliminar-miniatura"
+                       onclick="return confirm('¿Eliminar esta foto?');">✕</a>
+                </div>
+                {% else %}
+                    {% if servicio.imagen %}
+                    <img src="{{ servicio.imagen }}" alt="{{ servicio.nombre }}" class="imagen-actual">
+                    {% else %}
+                    <p>Todavía no tiene fotos cargadas.</p>
+                    {% endif %}
+                {% endfor %}
+            </div>
 
             <form method="post" action="/admin/editar-servicio/{{ servicio.id }}" enctype="multipart/form-data" class="form-producto">
                 <label for="nombre">Nombre</label>
@@ -35,8 +49,8 @@
                     <option value="false" {% if not servicio.disponible %}selected{% endif %}>No</option>
                 </select>
 
-                <label for="imagen">Cambiar foto (opcional)</label>
-                <input type="file" id="imagen" name="imagen" accept="image/*">
+                <label for="imagenes">Agregar más fotos (opcional, podés elegir varias)</label>
+                <input type="file" id="imagenes" name="imagenes" accept="image/*" multiple>
 
                 <button type="submit">Guardar cambios</button>
             </form>
