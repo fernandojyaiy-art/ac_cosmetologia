@@ -41,7 +41,17 @@
                 <ul class="lista-servicios">
                     {% for servicio in servicios_disponibles %}
                     <li class="servicios">
-                        {% if servicio.imagen %}
+                        {% if servicio.imagenes %}
+                        <div class="carrusel-fotos">
+                            {% for img in servicio.imagenes %}
+                            <img src="{{ img.ruta_imagen }}" alt="{{ servicio.nombre }}" class="foto-carrusel{% if loop.first %} activa{% endif %}">
+                            {% endfor %}
+                            {% if servicio.imagenes|length > 1 %}
+                            <button type="button" class="btn-carrusel-anterior" aria-label="Foto anterior">‹</button>
+                            <button type="button" class="btn-carrusel-siguiente" aria-label="Foto siguiente">›</button>
+                            {% endif %}
+                        </div>
+                        {% elif servicio.imagen %}
                         <img src="{{ servicio.imagen }}" alt="{{ servicio.nombre }}">
                         {% endif %}
                         <h3>{{ servicio.nombre }}</h3>
@@ -94,6 +104,7 @@
         </div>
     </footer>
     <script src="/static/js/mas-info.js"></script>
+    <script src="/static/js/carrusel.js"></script>
     <script src="/static/js/nav.js"></script>
 </body>
 </html>

@@ -41,7 +41,17 @@
                     <ul class="lista-productos">
                         {% for producto in productos_disponibles %}
                         <li class="producto">
-                            {% if producto.imagen %}
+                            {% if producto.imagenes %}
+                            <div class="carrusel-fotos">
+                                {% for img in producto.imagenes %}
+                                <img src="{{ img.ruta_imagen }}" alt="{{ producto.nombre }}" class="foto-carrusel{% if loop.first %} activa{% endif %}">
+                                {% endfor %}
+                                {% if producto.imagenes|length > 1 %}
+                                <button type="button" class="btn-carrusel-anterior" aria-label="Foto anterior">‹</button>
+                                <button type="button" class="btn-carrusel-siguiente" aria-label="Foto siguiente">›</button>
+                                {% endif %}
+                            </div>
+                            {% elif producto.imagen %}
                             <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}">
                             {% endif %}
                             <h3>{{ producto.nombre }}</h3>
@@ -151,6 +161,7 @@
 
     <script src="/static/js/carrito.js"></script>
     <script src="/static/js/mas-info.js"></script>
+    <script src="/static/js/carrusel.js"></script>
     <script src="/static/js/nav.js"></script>
 </body>
 </html>
