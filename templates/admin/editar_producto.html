@@ -54,6 +54,9 @@
                     {% endfor %}
                 </select>
 
+                <label for="stock">Stock (cuántas unidades quedan)</label>
+                <input type="number" step="1" min="0" id="stock" name="stock" value="{{ producto.stock }}" required>
+
                 <label for="disponible">Disponible</label>
                 <select id="disponible" name="disponible">
                     <option value="true" {% if producto.disponible %}selected{% endif %}>Sí</option>

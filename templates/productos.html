@@ -51,11 +51,19 @@
                            {% if producto.descripcion %} <p class="texto-clamp">{{ producto.descripcion }}</p> <button type="button" class="btn-mas-info">Más info</button> {% endif %}
                             <p class="precio-producto">${{ "%.2f"|format(producto.precio) }}</p>
 
+                            <p class="stock-producto">
+                                {% if producto.stock and producto.stock > 0 %}
+                                Quedan {{ producto.stock }}
+                                {% else %}
+                                Sin stock
+                                {% endif %}
+                            </p>
+
                             <a href="https://wa.me/5491124038046?text=Hola,%20quiero%20consultar%20por%20el%20producto:%20{{ producto.nombre }}"
                                class="btn-wsp" target="_blank" rel="noopener">
                                 Comunicate por WhatsApp
                             </a>
-                            
+
 <div class="selector-cantidad">
     <button type="button" class="btn-cantidad" data-accion="restar">−</button>
     <span class="cantidad-valor">1</span>

@@ -147,6 +147,7 @@ def crear_producto_form(
     precio: float = Form(...),
     categoria_id: int = Form(...),
     marca_id: str = Form(""),
+    stock: int = Form(0),
     imagenes: List[UploadFile] = File(None),
     disponible: str = Form("true"),
     db: Session = Depends(get_db)
@@ -160,6 +161,7 @@ def crear_producto_form(
         precio=precio,
         categoria_id=categoria_id,
         marca_id=int(marca_id) if marca_id else None,
+        stock=stock,
         disponible=(disponible == "true"),
     )
     db.add(nuevo_producto)
@@ -217,6 +219,7 @@ def guardar_edicion(
     precio: float = Form(...),
     categoria_id: int = Form(...),
     marca_id: str = Form(""),
+    stock: int = Form(0),
     disponible: str = Form("true"),
     imagenes: List[UploadFile] = File(None),
     db: Session = Depends(get_db)
@@ -231,6 +234,7 @@ def guardar_edicion(
     producto.precio = precio
     producto.categoria_id = categoria_id
     producto.marca_id = int(marca_id) if marca_id else None
+    producto.stock = stock
     producto.disponible = (disponible == "true")
 
     guardar_imagenes_producto(producto, imagenes, db)

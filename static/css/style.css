@@ -1242,3 +1242,16 @@ a:hover {
 .btn-eliminar-miniatura:hover {
   background-color: #a93226;
 }
+
+/* ============================================================
+   STOCK POR PRODUCTO (cuántas unidades quedan)
+   Agregá esto al final de tu style.css — clase nueva, no
+   reemplaza nada.
+   ============================================================ */
+
+.stock-producto {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-acento);
+  margin: -2px 0 4px 0;
+}

@@ -61,6 +61,7 @@ class Producto(Base):
     precio = Column(Float, nullable=False)
     imagen = Column(String, nullable=True)  # portada: se mantiene sincronizada con la primera de "imagenes"
     disponible = Column(Boolean, default=True)
+    stock = Column(Integer, default=0, nullable=False)  # cantidad disponible, la carga Anto a mano
 
     categoria_id = Column(Integer, ForeignKey("categorias.id"), nullable=True)
     marca_id = Column(Integer, ForeignKey("marcas.id"), nullable=True)
