@@ -1131,6 +1131,8 @@ a:hover {
   min-width: 220px;
   padding: 8px 0;
   z-index: 600;
+  max-height: calc(100vh - 90px);   /* NUEVO: no lo dejes crecer más que la pantalla */
+  overflow-y: auto;                  /* NUEVO: si el listado es largo, scrollea adentro del propio menú */
 }
 
 #menu-panel.abierto {
