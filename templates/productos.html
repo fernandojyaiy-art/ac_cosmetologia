@@ -41,6 +41,7 @@
                     <ul class="lista-productos">
                         {% for producto in productos_disponibles %}
                         <li class="producto">
+                            <a href="/producto/{{ producto.id }}" class="link-tarjeta">
                             {% if producto.imagenes %}
                             <div class="carrusel-fotos">
                                 {% for img in producto.imagenes %}
@@ -55,6 +56,7 @@
                             <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}">
                             {% endif %}
                             <h3>{{ producto.nombre }}</h3>
+                            </a>
                             {% if producto.marca %}
                             <p class="marca-producto">{{ producto.marca.nombre }}</p>
                             {% endif %}

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ servicio.nombre }} - Servicios de Estética</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header id="inicio">
+        <div class="logo" role="img" aria-label="Logo Ac Cosmetología"></div>
+        <h1>Servicios de Estética</h1>
+        <button id="btn-menu-hamburguesa" aria-label="Abrir menú">☰</button>
+        <nav id="menu-panel">
+            <ul>
+                <li><a href="/">Inicio</a></li>
+                <li class="nav-dropdown">
+                    <a href="/servicios" class="nav-dropdown-toggle">Servicios ▾</a>
+                    <ul class="nav-submenu">
+                        {% for categoria in categorias %}
+                        <li><a href="/servicios#cat-{{ categoria.id }}">{{ categoria.nombre }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                <li><a href="/contacto">Contacto</a></li>
+                <li><a href="/productos">Productos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="contenedor-detalle">
+            <p><a href="/servicios">&larr; Volver a servicios</a></p>
+
+            <div class="servicios servicio-detalle">
+                {% if servicio.imagenes %}
+                <div class="carrusel-fotos">
+                    {% for img in servicio.imagenes %}
+                    <img src="{{ img.ruta_imagen }}" alt="{{ servicio.nombre }}" class="foto-carrusel{% if loop.first %} activa{% endif %}">
+                    {% endfor %}
+                    {% if servicio.imagenes|length > 1 %}
+                    <button type="button" class="btn-carrusel-anterior" aria-label="Foto anterior">‹</button>
+                    <button type="button" class="btn-carrusel-siguiente" aria-label="Foto siguiente">›</button>
+                    {% endif %}
+                </div>
+                {% elif servicio.imagen %}
+                <img src="{{ servicio.imagen }}" alt="{{ servicio.nombre }}">
+                {% endif %}
+
+                <h3>{{ servicio.nombre }}</h3>
+                {% if servicio.descripcion %}
+                <p class="descripcion-detalle">{{ servicio.descripcion }}</p>
+                {% endif %}
+
+                <a href="https://wa.me/5491124038046?text=Hola,%20quiero%20consultar%20por%20el%20servicio:%20{{ servicio.nombre }}"
+                   class="btn-wsp" target="_blank" rel="noopener">
+                    Comunicate por WhatsApp
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 Centro de Estética</p>
+        <div class="contacto-lista">
+            <a href="https://wa.me/5491124038046" target="_blank" rel="noopener" class="contacto-fila">
+                 <span class="contacto-icono icono-whatsapp"></span>
+                <span class="contacto-texto">
+                    <span class="contacto-etiqueta">WhatsApp</span>
+                    <span class="contacto-dato">Escribinos</span>
+                </span>
+            </a>
+            <a href="https://www.instagram.com/cosmetologa.ac/" target="_blank" rel="noopener" class="contacto-fila">
+                 <span class="contacto-icono icono-instagram"></span>.
+                <span class="contacto-texto">
+                    <span class="contacto-etiqueta">Instagram</span>
+                    <span class="contacto-dato">@cosmetologa.ac</span>
+                </span>
+            </a>
+        </div>
+    </footer>
+
+    <script src="/static/js/carrusel.js"></script>
+    <script src="/static/js/nav.js"></script>
+</body>
+</html>

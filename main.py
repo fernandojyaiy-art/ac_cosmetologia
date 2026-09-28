@@ -101,6 +101,17 @@ def ver_servicios(request: Request, db: Session = Depends(get_db)):
     return templates.TemplateResponse(request, "servicios.html", {"categorias": categorias})
 
 
+@app.get("/servicio/{servicio_id}")
+def ver_servicio(servicio_id: int, request: Request, db: Session = Depends(get_db)):
+    servicio = db.query(models.Servicio).filter(models.Servicio.id == servicio_id).first()
+    if not servicio:
+        return RedirectResponse("/servicios")
+    categorias = db.query(models.CategoriaServicio).all()
+    return templates.TemplateResponse(
+        request, "servicio_detalle.html", {"servicio": servicio, "categorias": categorias}
+    )
+
+
 @app.get("/contacto")
 def contacto():
     return FileResponse("contacto-html/contacto.html")
@@ -110,6 +121,17 @@ def contacto():
 def ver_productos(request: Request, db: Session = Depends(get_db)):
     categorias = db.query(models.Categoria).all()
     return templates.TemplateResponse(request, "productos.html", {"categorias": categorias})
+
+
+@app.get("/producto/{producto_id}")
+def ver_producto(producto_id: int, request: Request, db: Session = Depends(get_db)):
+    producto = db.query(models.Producto).filter(models.Producto.id == producto_id).first()
+    if not producto:
+        return RedirectResponse("/productos")
+    categorias = db.query(models.Categoria).all()
+    return templates.TemplateResponse(
+        request, "producto_detalle.html", {"producto": producto, "categorias": categorias}
+    )
 
 
 @app.get("/admin/login")

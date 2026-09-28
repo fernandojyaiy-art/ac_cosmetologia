@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ producto.nombre }} - AC Cosmetología</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+   <header id="inicio">
+        <div class="logo" role="img" aria-label="Logo Ac Cosmetología"></div>
+        <h1>Catálogo de Productos</h1>
+        <button id="btn-menu-hamburguesa" aria-label="Abrir menú">☰</button>
+        <nav id="menu-panel">
+            <ul>
+                <li><a href="/">Inicio</a></li>
+                <li><a href="/servicios">Servicios</a></li>
+                <li><a href="/contacto">Contacto</a></li>
+                <li class="nav-dropdown">
+                    <a href="/productos" class="nav-dropdown-toggle">Productos ▾</a>
+                    <ul class="nav-submenu">
+                        {% for categoria in categorias %}
+                        <li><a href="/productos#cat-{{ categoria.id }}">{{ categoria.nombre }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="contenedor-detalle">
+            <p><a href="/productos">&larr; Volver a productos</a></p>
+
+            <div class="producto producto-detalle">
+                {% if producto.imagenes %}
+                <div class="carrusel-fotos">
+                    {% for img in producto.imagenes %}
+                    <img src="{{ img.ruta_imagen }}" alt="{{ producto.nombre }}" class="foto-carrusel{% if loop.first %} activa{% endif %}">
+                    {% endfor %}
+                    {% if producto.imagenes|length > 1 %}
+                    <button type="button" class="btn-carrusel-anterior" aria-label="Foto anterior">‹</button>
+                    <button type="button" class="btn-carrusel-siguiente" aria-label="Foto siguiente">›</button>
+                    {% endif %}
+                </div>
+                {% elif producto.imagen %}
+                <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}">
+                {% endif %}
+
+                <h3>{{ producto.nombre }}</h3>
+                {% if producto.marca %}
+                <p class="marca-producto">{{ producto.marca.nombre }}</p>
+                {% endif %}
+                {% if producto.descripcion %}
+                <p class="descripcion-detalle">{{ producto.descripcion }}</p>
+                {% endif %}
+                <p class="precio-producto">${{ "%.2f"|format(producto.precio) }}</p>
+
+                <p class="stock-producto">
+                    {% if producto.stock and producto.stock > 0 %}
+                    Quedan {{ producto.stock }}
+                    {% else %}
+                    Sin stock
+                    {% endif %}
+                </p>
+
+                <a href="https://wa.me/5491124038046?text=Hola,%20quiero%20consultar%20por%20el%20producto:%20{{ producto.nombre }}"
+                   class="btn-wsp" target="_blank" rel="noopener">
+                    Comunicate por WhatsApp
+                </a>
+
+                <div class="selector-cantidad">
+                    <button type="button" class="btn-cantidad" data-accion="restar">−</button>
+                    <span class="cantidad-valor">1</span>
+                    <button type="button" class="btn-cantidad" data-accion="sumar">+</button>
+                </div>
+                <button class="btn-agregar-carrito" data-nombre="{{ producto.nombre }}" data-precio="{{ producto.precio }}">
+                    Agregar al carrito
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 Centro de Estética.</p>
+        <div class="contacto-lista">
+            <a href="https://wa.me/5491124038046" target="_blank" rel="noopener" class="contacto-fila">
+                <span class="contacto-icono icono-whatsapp"></span>
+                <span class="contacto-texto">
+                    <span class="contacto-etiqueta">WhatsApp</span>
+                    <span class="contacto-dato">Escribinos</span>
+                </span>
+            </a>
+            <a href="https://www.instagram.com/cosmetologa.ac/" target="_blank" rel="noopener" class="contacto-fila">
+                 <span class="contacto-icono icono-instagram"></span>.
+                <span class="contacto-texto">
+                    <span class="contacto-etiqueta">Instagram</span>
+                    <span class="contacto-dato">@cosmetologa.ac</span>
+                </span>
+            </a>
+        </div>
+    </footer>
+
+    <!-- Botón flotante del carrito: tiene que estar en TODAS las páginas
+         que carguen carrito.js, aunque acá no se vea "grid" de productos,
+         porque carrito.js lo busca por id apenas carga la página. -->
+    <button id="boton-carrito-flotante" aria-label="Ver carrito">
+        🛒
+        <span id="contador-carrito">0</span>
+    </button>
+
+    <div id="panel-carrito">
+        <div id="panel-carrito-lista">
+            <h3>Tu pedido</h3>
+            <ul id="lista-carrito"></ul>
+            <div class="total-carrito-fila">
+                <span>Total</span>
+                <span id="total-carrito">$0,00</span>
+            </div>
+            <div class="panel-carrito-acciones">
+                <button id="btn-vaciar-carrito">Vaciar carrito</button>
+                <button id="btn-confirmar-pedido">Confirmar pedido</button>
+            </div>
+        </div>
+
+        <div id="panel-carrito-confirmacion">
+            <button class="btn-volver-chico" id="btn-volver-carrito">← Volver al carrito</button>
+            <h3>Resumen del pedido</h3>
+            <div id="resumen-confirmacion"></div>
+            <div class="total-confirmacion-fila">
+                <span>Total</span>
+                <span id="total-confirmacion">$0,00</span>
+            </div>
+
+            <label for="nombre-cliente">Tu nombre</label>
+            <input type="text" id="nombre-cliente" placeholder="¿Cómo te llamás?" required>
+
+            <p class="aviso-transferencia">
+                Al enviar, nos vas a escribir por WhatsApp con el detalle de tu pedido. Ahí coordinamos el medio de pago.
+            </p>
+
+            <button id="btn-enviar-pedido-final">Enviar pedido por WhatsApp</button>
+        </div>
+    </div>
+
+    <script src="/static/js/carrito.js"></script>
+    <script src="/static/js/carrusel.js"></script>
+    <script src="/static/js/nav.js"></script>
+</body>
+</html>

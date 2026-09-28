@@ -1317,3 +1317,52 @@ a:hover {
 .btn-carrusel-siguiente {
   right: 6px;
 }
+
+/* ============================================================
+   TARJETAS CLICKEABLES (productos.html y servicios.html)
+   El link que envuelve la foto + el título en cada tarjeta.
+   Agregá esto al final de tu style.css.
+   ============================================================ */
+
+.link-tarjeta {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.link-tarjeta:visited {
+  color: inherit;
+}
+
+.link-tarjeta h3 {
+  margin-top: 10px;
+}
+
+/* ============================================================
+   PÁGINA DE DETALLE (producto_detalle.html y servicio_detalle.html)
+   Reusa las clases .producto / .servicios (por eso el carrito
+   sigue funcionando igual), solo la agranda y la centra.
+   ============================================================ */
+
+.contenedor-detalle {
+  max-width: 480px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.producto-detalle,
+.servicio-detalle {
+  margin-top: 15px;
+}
+
+.producto-detalle .carrusel-fotos,
+.producto-detalle .foto-carrusel,
+.servicio-detalle .carrusel-fotos,
+.servicio-detalle .foto-carrusel {
+  height: 320px;
+}
+
+.descripcion-detalle {
+  white-space: pre-line;
+  text-align: left;
+}
