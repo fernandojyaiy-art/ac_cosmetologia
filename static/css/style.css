@@ -1366,3 +1366,22 @@ a:hover {
   white-space: pre-line;
   text-align: left;
 }
+/* ============================================================
+   PANEL ADMIN: fila de título de cada categoría
+   Agregá esto al final de tu style.css (clase nueva, no pisa nada).
+   ============================================================ */
+
+.tabla-panel .fila-categoria td {
+  background-color: var(--color-fondo);
+  color: var(--color-principal);
+  font-family: var(--fuente-titulos);
+  font-size: 20px;
+  font-weight: 700;
+  padding: 12px 14px;
+  border-bottom: 2px solid var(--color-claro);
+}
+
+/* la fila de categoría no debe cambiar de color al pasar el mouse */
+.tabla-panel tr.fila-categoria:hover td {
+  background-color: var(--color-fondo);
+}

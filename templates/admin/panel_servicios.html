@@ -21,6 +21,10 @@
             <th>Estado</th>
             <th>Acciones</th>
         </tr>
+        {% for nombre_categoria, servicios in grupos %}
+        <tr class="fila-categoria">
+            <td colspan="5">{{ nombre_categoria }} ({{ servicios|length }})</td>
+        </tr>
         {% for s in servicios %}
         <tr>
             <td>{% if s.imagen %}<img src="{{ s.imagen }}" width="60">{% endif %}</td>
@@ -41,9 +45,11 @@
                 </a>
             </td>
         </tr>
-        {% else %}
-        <tr><td colspan="5">Todavía no cargaste ningún servicio.</td></tr>
         {% endfor %}
+        {% endfor %}
+        {% if not grupos %}
+        <tr><td colspan="5">Todavía no cargaste ningún servicio.</td></tr>
+        {% endif %}
     </table>
 </body>
 </html>

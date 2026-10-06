@@ -8,6 +8,7 @@ from typing import List, Optional
 import shutil
 import uuid
 import os
+import unicodedata
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -195,12 +196,45 @@ def crear_producto_form(
     return RedirectResponse("/admin/panel", status_code=303)
 
 
+def clave_orden(texto: Optional[str]) -> str:
+    """Clave para ordenar alfabéticamente ignorando mayúsculas y acentos
+    (así "Ácido" queda entre las A y no después de la Z)."""
+    sin_acentos = unicodedata.normalize("NFKD", texto or "").encode("ascii", "ignore").decode()
+    return sin_acentos.lower()
+
+
+def agrupar_por_categoria(items):
+    """Agrupa productos o servicios por categoría y los ordena de la A a la Z.
+    Devuelve una lista de pares: [(nombre de categoría, [items ordenados]), ...].
+    Sirve para los dos paneles porque productos y servicios tienen ambos
+    .categoria y .nombre."""
+    por_categoria = {}
+    sin_categoria = []
+    for item in items:
+        if item.categoria:
+            por_categoria.setdefault(item.categoria.nombre, []).append(item)
+        else:
+            sin_categoria.append(item)
+
+    # Categorías de la A a la Z, y dentro de cada una los items también
+    grupos = [
+        (nombre, sorted(lista, key=lambda i: clave_orden(i.nombre)))
+        for nombre, lista in sorted(por_categoria.items(), key=lambda par: clave_orden(par[0]))
+    ]
+    # Los que no tienen categoría van al final, así no desaparecen del panel
+    if sin_categoria:
+        grupos.append(("Sin categoría", sorted(sin_categoria, key=lambda i: clave_orden(i.nombre))))
+    return grupos
+
+
 @app.get("/admin/panel")
 def ver_panel(request: Request, db: Session = Depends(get_db)):
     if not request.session.get("logueado"):
         return RedirectResponse("/admin/login")
     productos = db.query(models.Producto).all()
-    return templates.TemplateResponse(request, "admin/panel.html", {"productos": productos})
+    return templates.TemplateResponse(
+        request, "admin/panel.html", {"grupos": agrupar_por_categoria(productos)}
+    )
 
 
 @app.get("/admin/eliminar-producto/{producto_id}")
@@ -426,7 +460,9 @@ def admin_servicios(request: Request, db: Session = Depends(get_db)):
     if not request.session.get("logueado"):
         return RedirectResponse("/admin/login")
     servicios = db.query(models.Servicio).all()
-    return templates.TemplateResponse(request, "admin/panel_servicios.html", {"servicios": servicios})
+    return templates.TemplateResponse(
+        request, "admin/panel_servicios.html", {"grupos": agrupar_por_categoria(servicios)}
+    )
 
 
 @app.get("/admin/nuevo-servicio")
