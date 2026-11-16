@@ -1,5 +1,7 @@
-from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey
-from sqlalchemy.orm import relationship
+from datetime import datetime
+
+from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey, DateTime, LargeBinary
+from sqlalchemy.orm import relationship, deferred
 
 from database import Base
 
@@ -63,6 +65,15 @@ class Producto(Base):
     disponible = Column(Boolean, default=True)
     stock = Column(Integer, default=0, nullable=False)  # cantidad disponible, la carga Anto a mano
 
+    # --- Precios al público ---
+    # "precio" de arriba es el PRECIO DE LISTA (débito/crédito).
+    precio_contado = Column(Float, nullable=True)  # efectivo/transferencia; vacío = solo se muestra el de lista
+
+    # --- Distribuidora Libra ---
+    precio_profesional = Column(Float, nullable=True)  # solo lo ven profesionales aprobadas
+    costo = Column(Float, nullable=True)  # precio distribuidor: lo ve SOLO el panel admin, nunca el catalogo
+    solo_profesionales = Column(Boolean, default=False, nullable=False)  # productos de gabinete (ej: crema x 4,9 kg)
+
     categoria_id = Column(Integer, ForeignKey("categorias.id"), nullable=True)
     marca_id = Column(Integer, ForeignKey("marcas.id"), nullable=True)
 
@@ -97,3 +108,26 @@ class ImagenServicio(Base):
 
     servicio_id = Column(Integer, ForeignKey("servicios.id"), nullable=False)
     servicio = relationship("Servicio", back_populates="imagenes")
+
+
+class Profesional(Base):
+    """Cosmetologa/esteticista que se registra para comprar a precio profesional.
+    Arranca en estado "pendiente"; Mati la aprueba desde el panel despues de ver el diploma."""
+    __tablename__ = "profesionales"
+
+    id = Column(Integer, primary_key=True, index=True)
+    nombre = Column(String, nullable=False)
+    email = Column(String, unique=True, nullable=False, index=True)
+    telefono = Column(String, nullable=False)
+    password_hash = Column(String, nullable=False)  # NUNCA la contraseña en texto plano
+
+    # "pendiente" | "aprobada" | "rechazada"
+    estado = Column(String, default="pendiente", nullable=False)
+    creada_en = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+    # La foto del diploma se guarda DENTRO de la base (no en static/uploads),
+    # asi no queda accesible por URL publica y persiste en Postgres sin depender del Volume.
+    # deferred(): no se trae de la base salvo que la pidas explicitamente,
+    # para que listar profesionales no cargue todas las fotos en memoria.
+    diploma_archivo = deferred(Column(LargeBinary, nullable=False))
+    diploma_tipo = Column(String, nullable=False)  # ej: "image/jpeg", para servirla bien despues

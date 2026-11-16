@@ -3,8 +3,17 @@
 // El pedido se manda por WhatsApp con el detalle; el medio de pago
 // se coordina directamente en la conversación (no se fija en la web).
 
-const CARRITO_KEY = "carritoAC";
 const NUMERO_WHATSAPP = "5491124038046";
+
+// ¿Quién está comprando? Lo dice el <body data-tipo-cliente="..."> que arma Jinja.
+// Si la página no lo tiene, se toma como público (así no se rompe ninguna página vieja).
+const ES_PROFESIONAL = document.body.dataset.tipoCliente === "profesional";
+
+// Un carrito separado para cada tipo de cliente, guardado con distinto nombre en el
+// navegador. Si fuera el mismo, un producto agregado a precio público seguiría con
+// ese precio después de loguearse como profesional (y al revés).
+// El del público conserva el nombre de siempre, así nadie pierde lo que ya tenía cargado.
+const CARRITO_KEY = ES_PROFESIONAL ? "carritoAC_profesional" : "carritoAC";
 
 // --- Funciones de datos ---
 
@@ -17,14 +26,18 @@ function guardarCarrito(carrito) {
   localStorage.setItem(CARRITO_KEY, JSON.stringify(carrito));
 }
 
-function agregarProducto(nombre, precio, cantidad) {
+// precioContado: precio en efectivo/transferencia, o null si el producto no tiene
+function agregarProducto(nombre, precio, cantidad, precioContado = null) {
   const carrito = obtenerCarrito();
   const existente = carrito.find((item) => item.nombre === nombre);
 
   if (existente) {
     existente.cantidad += cantidad;
+    // Actualizamos los precios por si cambiaron desde la última vez que lo agregó
+    existente.precio = precio;
+    existente.precioContado = precioContado;
   } else {
-    carrito.push({ nombre: nombre, precio: precio, cantidad: cantidad });
+    carrito.push({ nombre: nombre, precio: precio, cantidad: cantidad, precioContado: precioContado });
   }
 
   guardarCarrito(carrito);
@@ -48,6 +61,50 @@ function calcularTotal(carrito) {
   return carrito.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
 }
 
+// Total pagando en efectivo/transferencia. Si un producto no tiene precio de contado
+// (o es un item viejo guardado antes de este cambio), se suma con su precio de lista.
+function calcularTotalContado(carrito) {
+  return carrito.reduce((acc, item) => acc + (item.precioContado || item.precio) * item.cantidad, 0);
+}
+
+// ¿Vale la pena mostrar el segundo total? Solo si algún producto tiene precio de contado
+function hayPrecioContado(carrito) {
+  return carrito.some((item) => item.precioContado);
+}
+
+// Crea (una sola vez) la fila "Efectivo / transferencia" debajo de una fila de total
+// que ya existe en el HTML. Se hace desde acá para no tener que tocar cada página.
+function filaTotalContado(idTotalExistente) {
+  const idNuevo = idTotalExistente + "-contado";
+  let fila = document.getElementById("fila-" + idNuevo);
+  if (!fila) {
+    const filaExistente = document.getElementById(idTotalExistente).parentElement;
+    fila = filaExistente.cloneNode(false); // misma clase/estilo, pero vacía
+    fila.id = "fila-" + idNuevo;
+    fila.innerHTML = `<span>Efectivo / transferencia</span><span id="${idNuevo}"></span>`;
+    filaExistente.after(fila);
+  }
+  return fila;
+}
+
+// Pone los dos totales (o uno solo) en una de las dos pantallas del carrito
+function mostrarTotales(carrito, idTotal) {
+  const filaLista = document.getElementById(idTotal).parentElement;
+  const etiquetaLista = filaLista.querySelector("span");
+  const filaContado = filaTotalContado(idTotal);
+
+  document.getElementById(idTotal).textContent = `$${formatearPrecio(calcularTotal(carrito))}`;
+
+  if (hayPrecioContado(carrito)) {
+    etiquetaLista.textContent = "Débito / crédito";
+    document.getElementById(idTotal + "-contado").textContent = `$${formatearPrecio(calcularTotalContado(carrito))}`;
+    filaContado.style.display = "";
+  } else {
+    etiquetaLista.textContent = "Total";
+    filaContado.style.display = "none";
+  }
+}
+
 function formatearPrecio(numero) {
   return numero.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
@@ -58,7 +115,6 @@ function renderizarCarrito() {
   const carrito = obtenerCarrito();
   const contador = document.getElementById("contador-carrito");
   const lista = document.getElementById("lista-carrito");
-  const totalTexto = document.getElementById("total-carrito");
 
   const totalItems = carrito.reduce((acc, item) => acc + item.cantidad, 0);
   contador.textContent = totalItems;
@@ -67,7 +123,7 @@ function renderizarCarrito() {
 
   if (carrito.length === 0) {
     lista.innerHTML = "<li class='carrito-vacio'>El carrito está vacío</li>";
-    totalTexto.textContent = "$0,00";
+    mostrarTotales(carrito, "total-carrito");
     return;
   }
 
@@ -80,7 +136,7 @@ function renderizarCarrito() {
     lista.appendChild(li);
   });
 
-  totalTexto.textContent = `$${formatearPrecio(calcularTotal(carrito))}`;
+  mostrarTotales(carrito, "total-carrito");
 }
 
 function toggleCarrito() {
@@ -108,7 +164,7 @@ function irAConfirmacion() {
     resumen.appendChild(p);
   });
 
-  document.getElementById("total-confirmacion").textContent = `$${formatearPrecio(calcularTotal(carrito))}`;
+  mostrarTotales(carrito, "total-confirmacion");
 }
 
 function volverAlCarrito() {
@@ -131,13 +187,23 @@ function generarMensajeWhatsappPedido() {
     return;
   }
 
-  let mensaje = `Hola! Soy ${nombre}, este es mi pedido:%0A`;
+  // El mensaje se arma como texto normal (con \n para los saltos de línea)
+  // y recién al final se "codifica" para la URL con encodeURIComponent.
+  // Antes los nombres iban sin codificar: un producto como "Vit-C & Resveratrol"
+  // cortaba el mensaje en el "&", y el "+" de "Niacinamide + Zinc" se convertía en espacio.
+  let mensaje = ES_PROFESIONAL ? "*PEDIDO PROFESIONAL*\n" : "";
+  mensaje += `Hola! Soy ${nombre}, este es mi pedido:\n`;
   carrito.forEach((item) => {
-    mensaje += `- ${item.nombre} x${item.cantidad}%0A`;
+    mensaje += `- ${item.nombre} x${item.cantidad}\n`;
   });
-  mensaje += `Total: $${formatearPrecio(calcularTotal(carrito))}`;
+  if (hayPrecioContado(carrito)) {
+    mensaje += `Total débito/crédito: $${formatearPrecio(calcularTotal(carrito))}\n`;
+    mensaje += `Total efectivo/transferencia: $${formatearPrecio(calcularTotalContado(carrito))}`;
+  } else {
+    mensaje += `Total: $${formatearPrecio(calcularTotal(carrito))}`;
+  }
 
-  const url = `https://wa.me/${NUMERO_WHATSAPP}?text=${mensaje}`;
+  const url = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
   window.open(url, "_blank");
 }
 
@@ -171,11 +237,13 @@ document.addEventListener("DOMContentLoaded", () => {
     boton.addEventListener("click", () => {
       const nombre = boton.dataset.nombre;
       const precio = parseFloat(boton.dataset.precio) || 0;
+      // data-precio-contado viene vacío si no hay precio de contado: parseFloat("") da NaN -> null
+      const precioContado = parseFloat(boton.dataset.precioContado) || null;
       const tarjeta = boton.closest(".producto");
       const cantidadEl = tarjeta ? tarjeta.querySelector(".cantidad-valor") : null;
       const cantidad = cantidadEl ? parseInt(cantidadEl.textContent, 10) : 1;
 
-      agregarProducto(nombre, precio, cantidad);
+      agregarProducto(nombre, precio, cantidad, precioContado);
 
       if (cantidadEl) cantidadEl.textContent = "1";
     });

@@ -4,3 +4,6 @@ __pycache__/
 .env
 estetica.db
 static/uploads/
+Claude outputs/
+# Lista de precios de Libra: tiene costos de distribuidor, no se sube a GitHub
+lista_libra.json

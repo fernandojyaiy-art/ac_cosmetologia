@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Profesionales - Ac Cosmetología</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        /* "Pendiente" no existía en el CSS: mismo formato que Disponible/Agotado, en amarillo */
+        .estado-pendiente {
+            display: inline-block; padding: 3px 10px; border-radius: 12px;
+            background-color: #fff4d6; color: #9a6b00; font-size: 13px; font-weight: 600;
+        }
+        /* Los botones van dentro de un <form> cada uno, así que los ponemos en fila */
+        .acciones-profesional { display: flex; gap: 8px; flex-wrap: wrap; }
+        .acciones-profesional form { margin: 0; }
+        .btn-aprobar, .btn-rechazar {
+            border: none; border-radius: var(--radio-boton); padding: 6px 12px;
+            font-weight: 600; cursor: pointer; color: #fff;
+        }
+        .btn-aprobar { background-color: #1e7d34; }
+        .btn-rechazar { background-color: #c0392b; }
+        .sin-registros { padding: 0 20px; }
+    </style>
+</head>
+<body>
+    <h1>Profesionales</h1>
+    <div class="acciones-panel">
+        <a href="/admin/panel">← Volver al panel</a>
+    </div>
+
+    {% if profesionales %}
+    <table class="tabla-panel">
+        <tr>
+            <th>Nombre</th>
+            <th>Contacto</th>
+            <th>Registro</th>
+            <th>Diploma</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+        {% for p in profesionales %}
+        <tr>
+            <td>{{ p.nombre }}</td>
+            <td>{{ p.email }}<br>{{ p.telefono }}</td>
+            <td>{{ p.creada_en.strftime("%d/%m/%Y") }}</td>
+            <td>
+                {# target="_blank": lo abre en otra pestaña, así no perdés esta lista #}
+                <a href="/admin/profesionales/{{ p.id }}/diploma" target="_blank">Ver diploma</a>
+            </td>
+            <td>
+                {% if p.estado == "pendiente" %}
+                    <span class="estado-pendiente">Pendiente</span>
+                {% elif p.estado == "aprobada" %}
+                    <span class="estado-disponible">Aprobada</span>
+                {% else %}
+                    <span class="estado-agotado">Rechazada</span>
+                {% endif %}
+            </td>
+            <td>
+                {# Aprobar/Rechazar son formularios POST y no links (GET):
+                   un link lo puede "abrir" solo el navegador al precargar páginas, o un buscador.
+                   Lo que CAMBIA datos va siempre por POST. #}
+                <div class="acciones-profesional">
+                    {% if p.estado != "aprobada" %}
+                    <form method="post" action="/admin/profesionales/{{ p.id }}/aprobar">
+                        <button type="submit" class="btn-aprobar">Aprobar</button>
+                    </form>
+                    {% endif %}
+                    {% if p.estado != "rechazada" %}
+                    <form method="post" action="/admin/profesionales/{{ p.id }}/rechazar"
+                          onsubmit="return confirm('¿Rechazar a {{ p.nombre }}? Deja de ver los precios profesionales.');">
+                        <button type="submit" class="btn-rechazar">
+                            {% if p.estado == "aprobada" %}Quitar acceso{% else %}Rechazar{% endif %}
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p class="sin-registros">Todavía no se registró ninguna profesional.</p>
+    {% endif %}
+</body>
+</html>

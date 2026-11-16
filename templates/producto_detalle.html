@@ -5,8 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ producto.nombre }} - AC Cosmetología</title>
     <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        /* Mismos estilos que en productos.html */
+        .precio-sugerido { font-size: 0.85em; color: var(--color-acento); margin-top: -6px; }
+        /* Precio de lista / contado para el público */
+        .etiqueta-precio { font-size: 0.75em; font-weight: 400; color: var(--color-acento); }
+        .precio-contado { font-weight: 700; color: var(--color-principal); margin-top: -6px; }
+        .etiqueta-gabinete {
+            display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px;
+            background-color: var(--color-principal); color: #fff; margin-bottom: 4px;
+        }
+    </style>
 </head>
-<body>
+{# Igual que en productos.html: carrito.js lo lee para usar el carrito correcto #}
+<body data-tipo-cliente="{{ 'profesional' if profesional else 'publico' }}">
 
    <header id="inicio">
         <div class="logo" role="img" aria-label="Logo Ac Cosmetología"></div>
@@ -25,6 +37,7 @@
                         {% endfor %}
                     </ul>
                 </li>
+                {% include "_menu_profesional.html" %}
             </ul>
         </nav>
     </header>
@@ -55,7 +68,20 @@
                 {% if producto.descripcion %}
                 <p class="descripcion-detalle">{{ producto.descripcion }}</p>
                 {% endif %}
-                <p class="precio-producto">${{ "%.2f"|format(producto.precio) }}</p>
+                {# Misma regla que en el catálogo: precio profesional solo si hay
+                   profesional logueada Y el producto lo tiene cargado #}
+                {% set precio_final = producto.precio_profesional if (profesional and producto.precio_profesional) else producto.precio %}
+                {% if producto.solo_profesionales %}
+                <span class="etiqueta-gabinete">Gabinete</span>
+                {% endif %}
+                <p class="precio-producto">${{ "%.2f"|format(precio_final) }}{% if not profesional and producto.precio_contado %} <span class="etiqueta-precio">débito / crédito</span>{% endif %}</p>
+                {# Precio de contado: solo para el público, y solo si está cargado #}
+                {% if not profesional and producto.precio_contado %}
+                <p class="precio-contado">${{ "%.2f"|format(producto.precio_contado) }} <span class="etiqueta-precio">efectivo / transferencia</span></p>
+                {% endif %}
+                {% if precio_final != producto.precio %}
+                <p class="precio-sugerido">Venta al público: ${{ "%.2f"|format(producto.precio) }}</p>
+                {% endif %}
 
                 <p class="stock-producto">
                     {% if producto.stock and producto.stock > 0 %}
@@ -65,7 +91,7 @@
                     {% endif %}
                 </p>
 
-                <a href="https://wa.me/5491124038046?text=Hola,%20quiero%20consultar%20por%20el%20producto:%20{{ producto.nombre }}"
+                <a href="https://wa.me/5491124038046?text=Hola,%20quiero%20consultar%20por%20el%20producto:%20{{ producto.nombre | urlencode }}"
                    class="btn-wsp" target="_blank" rel="noopener">
                     Comunicate por WhatsApp
                 </a>
@@ -75,7 +101,8 @@
                     <span class="cantidad-valor">1</span>
                     <button type="button" class="btn-cantidad" data-accion="sumar">+</button>
                 </div>
-                <button class="btn-agregar-carrito" data-nombre="{{ producto.nombre }}" data-precio="{{ producto.precio }}">
+                <button class="btn-agregar-carrito" data-nombre="{{ producto.nombre }}" data-precio="{{ precio_final }}"
+                        data-precio-contado="{{ producto.precio_contado if (not profesional and producto.precio_contado) else '' }}">
                     Agregar al carrito
                 </button>
             </div>

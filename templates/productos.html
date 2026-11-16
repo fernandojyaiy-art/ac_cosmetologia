@@ -5,8 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Productos - AC Cosmetología</title>
     <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        /* Franja que le avisa a la profesional que está viendo sus precios */
+        .aviso-profesional {
+            background-color: var(--color-fondo); border: 1px solid var(--color-claro);
+            border-radius: var(--radio-boton); padding: 10px 16px; margin: 16px 20px 0;
+            text-align: center; color: var(--color-principal);
+        }
+        .precio-sugerido { font-size: 0.85em; color: var(--color-acento); margin-top: -6px; }
+        /* Precio de lista / contado para el público */
+        .etiqueta-precio { font-size: 0.75em; font-weight: 400; color: var(--color-acento); }
+        .precio-contado { font-weight: 700; color: var(--color-principal); margin-top: -6px; }
+        .buscador-catalogo {
+            display: block; width: calc(100% - 40px); max-width: 600px; margin: 20px auto 0;
+            padding: 12px 16px; font-size: 16px; box-sizing: border-box;
+            border: 1px solid var(--color-claro); border-radius: var(--radio-boton);
+        }
+        #catalogo-sin-resultados { text-align: center; }
+        .etiqueta-gabinete {
+            display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px;
+            background-color: var(--color-principal); color: #fff; margin-bottom: 4px;
+        }
+    </style>
 </head>
-<body>
+{# data-tipo-cliente: carrito.js lo va a leer para separar el carrito de profesionales del público #}
+<body data-tipo-cliente="{{ 'profesional' if profesional else 'publico' }}">
 
    <header id="inicio">
         <div class="logo" role="img" aria-label="Logo Ac Cosmetología"></div>
@@ -25,22 +48,43 @@
                         {% endfor %}
                     </ul>
                 </li>
+                {% include "_menu_profesional.html" %}
             </ul>
         </nav>
     </header>
 
+    {% if profesional %}
+    <p class="aviso-profesional">
+        Hola {{ profesional.nombre.split()[0] }}, estás viendo <strong>precios profesionales</strong>.
+        Debajo de cada precio está el precio de venta al público sugerido.
+    </p>
+    {% endif %}
+
+    {# Mismo buscador.js que el panel: acá filtra las tarjetas (.producto)
+       y esconde las categorías (section.grupo-busqueda) que quedan vacías #}
+    <input type="search" class="buscador buscador-catalogo" placeholder="Buscar productos..."
+           aria-label="Buscar productos"
+           data-items=".producto" data-grupos=".grupo-busqueda" data-sin-resultados="catalogo-sin-resultados">
+
     <main>
+        <p id="catalogo-sin-resultados" style="display: none;">No encontramos productos con ese nombre.</p>
         {% set hay_productos = namespace(valor=false) %}
 
-        {% for categoria in categorias %}
-            {% set productos_disponibles = categoria.productos | selectattr("disponible") | list %}
+        {# "secciones" ya viene armado desde main.py (armar_catalogo): cada categoría con
+           SOLO los productos que esta persona puede ver. Así la regla vive en un solo lugar
+           (puede_ver) y el template no tiene que saber de profesionales ni de gabinete. #}
+        {% for categoria, productos_disponibles in secciones %}
             {% if productos_disponibles %}
                 {% set hay_productos.valor = true %}
-                <section id="cat-{{ categoria.id }}">
+                <section id="cat-{{ categoria.id }}" class="grupo-busqueda">
                     <h2>{{ categoria.nombre }}</h2>
                     <ul class="lista-productos">
                         {% for producto in productos_disponibles %}
-                        <li class="producto">
+                        {# Precio que se cobra: el profesional si hay profesional logueada Y el
+                           producto lo tiene cargado; si no, el público de siempre. #}
+                        {% set precio_final = producto.precio_profesional if (profesional and producto.precio_profesional) else producto.precio %}
+                        {# data-texto: lo que se busca (sin la descripción, que podría dar resultados raros) #}
+                        <li class="producto" data-texto="{{ producto.nombre }} {{ producto.marca.nombre if producto.marca }} {{ categoria.nombre }}">
                             <a href="/producto/{{ producto.id }}" class="link-tarjeta">
                             {% if producto.imagenes %}
                             <div class="carrusel-fotos">
@@ -61,7 +105,17 @@
                             <p class="marca-producto">{{ producto.marca.nombre }}</p>
                             {% endif %}
                            {% if producto.descripcion %} <p class="texto-clamp">{{ producto.descripcion }}</p> <button type="button" class="btn-mas-info">Más info</button> {% endif %}
-                            <p class="precio-producto">${{ "%.2f"|format(producto.precio) }}</p>
+                            {% if producto.solo_profesionales %}
+                            <span class="etiqueta-gabinete">Gabinete</span>
+                            {% endif %}
+                            <p class="precio-producto">${{ "%.2f"|format(precio_final) }}{% if not profesional and producto.precio_contado %} <span class="etiqueta-precio">débito / crédito</span>{% endif %}</p>
+                            {# Precio de contado: solo para el público, y solo si está cargado #}
+                            {% if not profesional and producto.precio_contado %}
+                            <p class="precio-contado">${{ "%.2f"|format(producto.precio_contado) }} <span class="etiqueta-precio">efectivo / transferencia</span></p>
+                            {% endif %}
+                            {% if precio_final != producto.precio %}
+                            <p class="precio-sugerido">Venta al público: ${{ "%.2f"|format(producto.precio) }}</p>
+                            {% endif %}
 
                             <p class="stock-producto">
                                 {% if producto.stock and producto.stock > 0 %}
@@ -71,7 +125,7 @@
                                 {% endif %}
                             </p>
 
-                            <a href="https://wa.me/5491124038046?text=Hola,%20quiero%20consultar%20por%20el%20producto:%20{{ producto.nombre }}"
+                            <a href="https://wa.me/5491124038046?text=Hola,%20quiero%20consultar%20por%20el%20producto:%20{{ producto.nombre | urlencode }}"
                                class="btn-wsp" target="_blank" rel="noopener">
                                 Comunicate por WhatsApp
                             </a>
@@ -81,7 +135,8 @@
     <span class="cantidad-valor">1</span>
     <button type="button" class="btn-cantidad" data-accion="sumar">+</button>
 </div>
-<button class="btn-agregar-carrito" data-nombre="{{ producto.nombre }}" data-precio="{{ producto.precio }}">
+<button class="btn-agregar-carrito" data-nombre="{{ producto.nombre }}" data-precio="{{ precio_final }}"
+        data-precio-contado="{{ producto.precio_contado if (not profesional and producto.precio_contado) else '' }}">
     Agregar al carrito
 </button>
                         </li>
@@ -165,5 +220,6 @@
     <script src="/static/js/mas-info.js"></script>
     <script src="/static/js/carrusel.js"></script>
     <script src="/static/js/nav.js"></script>
+    <script src="/static/js/buscador.js"></script>
 </body>
 </html>

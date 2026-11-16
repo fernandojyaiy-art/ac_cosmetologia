@@ -4,6 +4,26 @@
     <meta charset="UTF-8">
     <title>Panel - Ac Cosmetología</title>
     <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .buscador-panel {
+            width: calc(100% - 40px); margin: 0 20px 16px; padding: 10px 14px; font-size: 16px;
+            border: 1px solid var(--color-claro); border-radius: var(--radio-boton); box-sizing: border-box;
+        }
+        /* Fila de categoría: nombre a la izquierda, botones masivos a la derecha */
+        .fila-categoria-contenido { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .acciones-masivas { display: flex; gap: 6px; flex-wrap: wrap; margin: 0; }
+        .acciones-masivas button {
+            font-family: inherit; font-size: 12px; font-weight: 600; padding: 4px 10px; cursor: pointer;
+            border-radius: var(--radio-boton); border: 1px solid var(--color-principal);
+            background: #fff; color: var(--color-principal);
+        }
+        .acciones-masivas button:hover { background: var(--color-principal); color: #fff; }
+        .estado-gabinete {
+            display: inline-block; padding: 3px 10px; border-radius: 12px; margin-top: 4px;
+            background-color: var(--color-principal); color: #fff; font-size: 13px; font-weight: 600;
+        }
+        #panel-sin-resultados { padding: 0 20px; }
+    </style>
 </head>
 <body>
     <h1>Panel de administración</h1>
@@ -11,27 +31,61 @@
         <a href="/admin/nuevo-producto">+ Agregar producto</a>
         <a href="/admin/servicios">Servicios</a>
         <a href="/admin/categorias">Categorías y marcas</a>
+        <a href="/admin/profesionales">
+            Profesionales{% if pendientes %} ({{ pendientes }} pendiente{{ "s" if pendientes > 1 }}){% endif %}
+        </a>
     </div>
 
+    {# Buscador: lo maneja static/js/buscador.js, filtra las filas sin recargar la página #}
+    <input type="search" class="buscador buscador-panel" placeholder="Buscar producto, marca o categoría..."
+           data-items=".item-busqueda" data-grupos=".grupo-busqueda" data-sin-resultados="panel-sin-resultados">
+    <p id="panel-sin-resultados" style="display: none;">No hay productos que coincidan con la búsqueda.</p>
+
     <table class="tabla-panel">
+        <thead>
         <tr>
             <th>Imagen</th>
             <th>Nombre</th>
-            <th>Precio</th>
+            <th>Lista</th>
+            <th>Contado</th>
+            <th>Precio prof.</th>
             <th>Categoría</th>
             <th>Marca</th>
             <th>Estado</th>
             <th>Acciones</th>
         </tr>
+        </thead>
         {% for nombre_categoria, productos in grupos %}
+        {# Un <tbody> por categoría: una tabla puede tener varios. Así el buscador puede
+           esconder la categoría entera (título incluido) si no le queda ningún producto. #}
+        {% set categoria_id = productos[0].categoria_id %}
+        <tbody class="grupo-busqueda" {% if categoria_id %}id="cat-{{ categoria_id }}"{% endif %}>
         <tr class="fila-categoria">
-            <td colspan="7">{{ nombre_categoria }} ({{ productos|length }})</td>
+            <td colspan="9">
+                <div class="fila-categoria-contenido">
+                    <span>{{ nombre_categoria }} ({{ productos|length }})</span>
+                    {% if categoria_id %}
+                    {# Un solo formulario con 4 botones: cada botón manda su propio "value"
+                       en el campo "accion", y main.py hace una cosa u otra según eso. #}
+                    <form method="post" action="/admin/categoria/{{ categoria_id }}/masivo" class="acciones-masivas"
+                          onsubmit="return confirm('¿Aplicar el cambio a TODOS los productos de esta categoría?');">
+                        <button type="submit" name="accion" value="disponibles">Todos disponibles</button>
+                        <button type="submit" name="accion" value="agotados">Todos agotados</button>
+                        <button type="submit" name="accion" value="solo_profesionales">Todos solo profesionales</button>
+                        <button type="submit" name="accion" value="para_todos">Todos para el público</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </td>
         </tr>
         {% for p in productos %}
-        <tr>
+        <tr class="item-busqueda" data-texto="{{ p.nombre }} {{ p.marca.nombre if p.marca }} {{ nombre_categoria }}">
             <td>{% if p.imagen %}<img src="{{ p.imagen }}" width="60">{% endif %}</td>
             <td>{{ p.nombre }}</td>
             <td>${{ p.precio }}</td>
+            {# Si no tiene precio de contado cargado, un guion: así ves de un vistazo cuáles faltan #}
+            <td>{{ "$%s"|format(p.precio_contado) if p.precio_contado else "-" }}</td>
+            <td>{{ "$%s"|format(p.precio_profesional) if p.precio_profesional else "-" }}</td>
             <td>{{ p.categoria.nombre if p.categoria else "-" }}</td>
             <td>{{ p.marca.nombre if p.marca else "-" }}</td>
             <td>
@@ -39,6 +93,9 @@
                     <span class="estado-disponible">Disponible</span>
                 {% else %}
                     <span class="estado-agotado">Agotado</span>
+                {% endif %}
+                {% if p.solo_profesionales %}
+                    <br><span class="estado-gabinete">Solo profesionales</span>
                 {% endif %}
             </td>
             <td>
@@ -50,7 +107,10 @@
             </td>
         </tr>
         {% endfor %}
+        </tbody>
         {% endfor %}
     </table>
+
+    <script src="/static/js/buscador.js"></script>
 </body>
 </html>

@@ -7,6 +7,20 @@
    
     <title>Ac Cosmetología</title>
     <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        /* Bloque "¿Sos profesional?" del inicio */
+        .bloque-profesionales {
+            background-color: var(--color-fondo); border: 1px solid var(--color-claro);
+            border-radius: 12px; padding: 20px; text-align: center;
+        }
+        .botones-profesionales { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 14px; }
+        .botones-profesionales a {
+            padding: 10px 18px; border-radius: var(--radio-boton); font-weight: 600; text-decoration: none;
+            border: 1px solid var(--color-principal);
+        }
+        .botones-profesionales .btn-principal { background-color: var(--color-principal); color: #fff; }
+        .botones-profesionales .btn-secundario { color: var(--color-principal); }
+    </style>
 </head>
 
 <body>
@@ -20,6 +34,7 @@
                 <li><a href="/servicios">Servicios</a></li>
                 <li><a href="/contacto">Contacto</a></li>
                 <li><a href="/productos">Productos</a></li>
+                {% include "_menu_profesional.html" %}
             </ul>
         </nav>
     </header>
@@ -39,6 +54,32 @@
              
             
             </section>
+
+        <!-- Acceso para profesionales (distribución Libra) -->
+        {# Todo el bloque se esconde si el interruptor de profesionales está apagado #}
+        {% if profesionales_activo %}
+        {# Si ya entró, no le ofrecemos registrarse: le mostramos el acceso a sus precios #}
+        {% if profesional %}
+        <section class="bloque-profesionales">
+            <h2>Hola, {{ profesional.nombre.split()[0] }}</h2>
+            <p>Ya estás dentro de tu cuenta profesional.</p>
+            <div class="botones-profesionales">
+                <a href="/productos" class="btn-principal">Ver mis precios</a>
+            </div>
+        </section>
+        {% else %}
+        <section class="bloque-profesionales">
+            <h2>¿Sos profesional?</h2>
+            <p>Si sos cosmetóloga o esteticista, registrate y accedé a <strong>precios profesionales</strong>
+               y productos de gabinete de Libra Cosmética.</p>
+            <div class="botones-profesionales">
+                <a href="/profesionales/registro" class="btn-principal">Quiero registrarme</a>
+                <a href="/profesionales/login" class="btn-secundario">Ya tengo cuenta</a>
+            </div>
+        </section>
+        {% endif %}
+        {% endif %}
+
          <!-- Sección de servicios de cosmetología -->
          <h2>Servicios de Cosmetología</h2>
            <ul>

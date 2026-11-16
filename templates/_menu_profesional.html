@@ -1,0 +1,13 @@
+{#  Pedacito de menú que se repite en TODAS las páginas.
+    Se usa así, dentro del <ul> del menú:   {% include "_menu_profesional.html" %}
+    El guion bajo adelante del nombre es una convención: "esto no es una página
+    entera, es una parte que se incluye en otras".
+    "profesional" y "profesionales_activo" los pone solo main.py (datos_de_sesion) en todos los templates. #}
+{% if profesionales_activo %}
+{% if profesional %}
+<li><a href="/productos">Hola, {{ profesional.nombre.split()[0] }}</a></li>
+<li><a href="/profesionales/salir">Salir</a></li>
+{% else %}
+<li><a href="/profesionales/login">Soy profesional</a></li>
+{% endif %}
+{% endif %}
